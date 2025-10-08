@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { AuthState } from "@/constant/enum/AuthState";
+import Link from "next/link";
 
 export default function LoginForm() {
   return (
@@ -14,7 +16,10 @@ export default function LoginForm() {
       <Button className="w-full">Login</Button>
       <Separator />
       <p>
-        Don't have an account? <span className="underline">Register</span>
+        Don't have an account?{" "}
+        <Link href={`?authState=${AuthState.REGISTER}`} className="underline">
+          Register
+        </Link>
       </p>
     </>
   );

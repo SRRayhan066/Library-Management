@@ -12,9 +12,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="max-w-[1440px] w-full h-screen flex justify-center mx-auto">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
