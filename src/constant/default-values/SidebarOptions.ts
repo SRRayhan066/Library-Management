@@ -5,6 +5,7 @@ import {
   IconCoinTakaFilled,
   IconSettings,
   IconHelpCircleFilled,
+  IconFilesFilled,
 } from "@tabler/icons-react";
 
 export const primaryItems = [
@@ -22,6 +23,11 @@ export const primaryItems = [
     title: "Members",
     url: "/members",
     icon: IconUsersGroup,
+  },
+  {
+    title: "Applications",
+    url: "/applications",
+    icon: IconFilesFilled,
   },
   {
     title: "Fines & Payments",
