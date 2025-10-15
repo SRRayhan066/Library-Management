@@ -30,8 +30,8 @@ export const primaryItems = [
     icon: IconFilesFilled,
   },
   {
-    title: "Fines & Payments",
-    url: "/fines-and-payments",
+    title: "Fines",
+    url: "/fines",
     icon: IconCoinTakaFilled,
   },
 ];
