@@ -9,6 +9,7 @@ import { IconSearch, IconCirclePlus } from "@tabler/icons-react";
 import Dropdown from "@/components/dropdown/Dropdown";
 import { bookGenres } from "@/constant/default-values/BookGenres";
 import CardItem from "@/components/card-Item/CardItem";
+import AddBookSection from "../add-book-section/AddBookSection";
 
 export default function BookSection() {
   return (
@@ -25,23 +26,18 @@ export default function BookSection() {
             </InputGroup>
 
             <div className="w-1/4">
-              <Dropdown label="Select Genre" options={bookGenres} />
+              <Dropdown placeholder="Select Genre" options={bookGenres} />
             </div>
-
-            <Button>
-              <IconCirclePlus /> New Book
-            </Button>
+            <AddBookSection />
           </div>
         </div>
         <Separator />
       </div>
 
-      <div className="flex justify-center">
-        <div className="p-[20px] inline-flex flex-wrap gap-[20px] max-w-[1500px] w-full">
-          {Array.from({ length: 11 }).map((_, index) => (
-            <CardItem key={index} />
-          ))}
-        </div>
+      <div className="p-[20px] inline-flex flex-wrap gap-[20px]">
+        {Array.from({ length: 11 }).map((_, index) => (
+          <CardItem key={index} />
+        ))}
       </div>
     </section>
   );

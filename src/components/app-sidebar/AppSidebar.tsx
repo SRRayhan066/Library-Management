@@ -22,7 +22,6 @@ import Link from "next/link";
 
 export function AppSidebar() {
   const pathName = usePathname();
-  console.log({ pathName });
   return (
     <Sidebar>
       <SidebarHeader>

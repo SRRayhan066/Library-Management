@@ -7,11 +7,14 @@ import {
 } from "@/components/ui/select";
 import { DropdownProps } from "@/types/DropdownProps";
 
-export default function Dropdown({ label = "", options = [] }: DropdownProps) {
+export default function Dropdown({
+  placeholder = "",
+  options = [],
+}: DropdownProps) {
   return (
     <Select>
       <SelectTrigger className="w-full">
-        <SelectValue placeholder={label} />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {options.map((option, index) => (
