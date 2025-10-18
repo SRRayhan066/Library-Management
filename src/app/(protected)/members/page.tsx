@@ -1,5 +1,5 @@
-import React from "react";
+import MemberSection from "@/section/member-section/MemberSection";
 
 export default function Page() {
-  return <div>Members</div>;
+  return <MemberSection />;
 }

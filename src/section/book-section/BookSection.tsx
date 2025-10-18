@@ -4,8 +4,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { Button } from "@/components/ui/button";
-import { IconSearch, IconCirclePlus } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
 import Dropdown from "@/components/dropdown/Dropdown";
 import { bookGenres } from "@/constant/default-values/BookGenres";
 import CardItem from "@/components/card-Item/CardItem";
