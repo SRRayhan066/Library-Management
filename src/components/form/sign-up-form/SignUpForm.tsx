@@ -9,7 +9,7 @@ import PasswordInput from "@/components/password-input/PasswordInput";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AuthState } from "@/constant/enum/AuthState";
-import { AppRouterUtils } from "@/utils/appRouterUtils";
+import { AppRouterUtils } from "@/utils/AppRouterUtils";
 
 export default function SignUpForm() {
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function SignUpForm() {
       <Input placeholder="Name" />
       <Input placeholder="Registration No." />
       <Input type="email" placeholder="Email" />
-      <Dropdown label="Select Department" options={DepartmentOptions} />
+      <Dropdown placeholder="Select Department" options={DepartmentOptions} />
       <PasswordInput />
       <Button className="w-full cursor-pointer" onClick={onRegister}>
         Register

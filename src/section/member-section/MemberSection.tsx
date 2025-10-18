@@ -8,6 +8,8 @@ import { IconSearch } from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
 import { TableHeaders, demoData } from "@/constant/default-values/MemberTable";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { AppRouterUtils } from "@/utils/AppRouterUtils";
 
 export default function MemberSection() {
   return (
@@ -32,7 +34,13 @@ export default function MemberSection() {
           headers={TableHeaders}
           data={demoData}
           actionLabel="View Details"
-          renderAction={(row) => <Button>View</Button>}
+          renderAction={(row) => (
+            <Button asChild>
+              <Link href={AppRouterUtils.MEMBER_DETAILS(row.registrationNo)}>
+                View
+              </Link>
+            </Button>
+          )}
         />
       </div>
     </section>

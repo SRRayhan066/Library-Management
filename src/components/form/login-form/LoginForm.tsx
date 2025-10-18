@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { AuthState } from "@/constant/enum/AuthState";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AppRouterUtils } from "@/utils/appRouterUtils";
+import { AppRouterUtils } from "@/utils/AppRouterUtils";
 
 export default function LoginForm() {
   const router = useRouter();

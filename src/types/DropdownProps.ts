@@ -6,6 +6,7 @@ interface OptionType {
 export interface DropdownProps {
   placeholder: string;
   options: OptionType[];
+  defaultValue?: string;
 }
 
 export interface DropdownFieldProps

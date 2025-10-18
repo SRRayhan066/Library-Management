@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button";
-
 export const TableHeaders = [
   {
     label: "Registration No.",
@@ -26,7 +24,7 @@ export const TableHeaders = [
     value: "totalReturned",
   },
   {
-    label: "Charges (BDT)",
+    label: "Due Charges (BDT)",
     value: "charges",
   },
 ];

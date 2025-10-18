@@ -42,7 +42,10 @@ export default function DataTable({
       </TableHeader>
       <TableBody className="[&_td]:px-5">
         {data.map((row, rowIndex) => (
-          <TableRow key={rowIndex} className="text-[16px] bg-gray-900 hover:bg-gray-800">
+          <TableRow
+            key={rowIndex}
+            className="text-[16px] bg-gray-900 hover:bg-gray-800"
+          >
             {headers.map((header, colIndex) => {
               const alignment =
                 colIndex === 0
@@ -63,7 +66,9 @@ export default function DataTable({
               );
             })}
             {renderAction && (
-              <TableCell className="text-right">{renderAction(row)}</TableCell>
+              <TableCell className="flex justify-end items-center">
+                {renderAction(row)}
+              </TableCell>
             )}
           </TableRow>
         ))}

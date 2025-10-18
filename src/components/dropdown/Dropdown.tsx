@@ -10,9 +10,10 @@ import { DropdownProps } from "@/types/DropdownProps";
 export default function Dropdown({
   placeholder = "",
   options = [],
+  defaultValue = "",
 }: DropdownProps) {
   return (
-    <Select>
+    <Select defaultValue={defaultValue}>
       <SelectTrigger className="w-full">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

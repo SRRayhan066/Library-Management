@@ -19,6 +19,7 @@ import {
 import { NavItemsProps } from "@/types/NavItemsProps";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { isActivePath } from "@/utils/CommonUtils";
 
 export function AppSidebar() {
   const pathName = usePathname();
@@ -74,7 +75,7 @@ const NavItems = ({ items, pathName = "", className = "" }: NavItemsProps) => (
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton
-              className={`${pathName === item.url && "bg-gray-800"}`}
+              className={`${isActivePath(pathName, item.url) && "bg-gray-800"}`}
               tooltip={item.title}
               asChild
             >
