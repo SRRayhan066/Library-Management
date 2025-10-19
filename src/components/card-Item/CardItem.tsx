@@ -7,26 +7,30 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { CardItemProps } from "@/types/CardItemProps";
 
-export default function CardItem() {
+export default function CardItem({
+  title,
+  description,
+  message,
+  total,
+  available,
+}: CardItemProps) {
   return (
-    <Card className="max-w-[350px]">
+    <Card className=""> 
       <CardHeader>
-        <CardDescription>Author name</CardDescription>
+        <CardDescription>{description}</CardDescription>
         <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-          Book Name
+          {title}
         </CardTitle>
         <CardAction className="flex flex-col items-end gap-2">
-          <Badge variant="outline">Total: 10</Badge>
-          <Badge variant="outline">Available: 06</Badge>
+          {total && <Badge variant="outline">Total: {total}</Badge>}
+          {available && <Badge variant="outline">Available: {available}</Badge>}
         </CardAction>
       </CardHeader>
-      <CardFooter className="text-sm">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-        odio itaque porro cupiditate mollitia deleniti saepe, eveniet tenetur
-        earum! Exercitationem cum, dolores atque labore nisi id quia obcaecati
-        temporibus excepturi!
-      </CardFooter>
+      <CardFooter className="text-sm">{message}</CardFooter>
     </Card>
   );
 }
+
+//max-w-[350px]

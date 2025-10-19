@@ -1,5 +1,5 @@
-import React from "react";
+import DashboardSection from "@/section/dashboard-section/DashboardSection";
 
 export default function Page() {
-  return <div>Dashboard</div>;
+  return <DashboardSection />;
 }

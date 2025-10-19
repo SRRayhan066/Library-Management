@@ -10,3 +10,12 @@ export const bookGenres = [
   { label: "History", value: "history" },
   { label: "Horror", value: "horror" },
 ];
+
+export const demoData = {
+  title: "Book Name",
+  description: "Author Name",
+  message:
+    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis odio itaque porro cupiditate mollitia deleniti saepe, eveniet tenetur earum! Exercitationem cum, dolores atque labore nisi id quia obcaecati temporibus excepturi!",
+  total: 10,
+  available: 6,
+};

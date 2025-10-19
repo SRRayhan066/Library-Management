@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/input-group";
 import { IconSearch } from "@tabler/icons-react";
 import Dropdown from "@/components/dropdown/Dropdown";
-import { bookGenres } from "@/constant/default-values/BookGenres";
+import { bookGenres, demoData } from "@/constant/default-values/BookGenres";
 import CardItem from "@/components/card-Item/CardItem";
 import AddBookSection from "../add-book-section/AddBookSection";
 
@@ -35,7 +35,7 @@ export default function BookSection() {
 
       <div className="p-[20px] inline-flex flex-wrap gap-[20px]">
         {Array.from({ length: 11 }).map((_, index) => (
-          <CardItem key={index} />
+          <CardItem key={index} {...demoData} />
         ))}
       </div>
     </section>
