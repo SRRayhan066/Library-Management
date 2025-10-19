@@ -1,5 +1,5 @@
-import React from "react";
+import UpcomingSection from "@/section/upcoming-section/UpcomingSection";
 
 export default function Page() {
-  return <div>Settings</div>;
+  return <UpcomingSection/>;
 }
