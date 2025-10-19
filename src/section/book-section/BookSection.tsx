@@ -33,7 +33,7 @@ export default function BookSection() {
         <Separator />
       </div>
 
-      <div className="p-[20px] inline-flex flex-wrap gap-[20px]">
+      <div className="p-[20px] grid grid-cols-4 gap-5">
         {Array.from({ length: 11 }).map((_, index) => (
           <CardItem key={index} {...demoData} />
         ))}
