@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "../ui/button";
 import { DataTableProps } from "@/types/DataTableProps";
 
 export default function DataTable({
