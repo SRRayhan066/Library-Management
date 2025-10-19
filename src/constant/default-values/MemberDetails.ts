@@ -1,3 +1,6 @@
+import { BookStatus } from "../enum/BookStatus";
+import { BookStatusMap } from "./BookStatusOptions";
+
 export const TableHeaders = [
   {
     label: "Serial No.",
@@ -33,7 +36,7 @@ export const demoData = [
     authorName: "Arif Azad",
     purchaseDate: "19th May, 2025",
     returnDate: "20th June, 2025",
-    status: "RETURNED",
+    status: BookStatus.RETURNED,
   },
   {
     serialNo: 2,
@@ -42,6 +45,15 @@ export const demoData = [
     authorName: "Arif Azad",
     purchaseDate: "19th May, 2025",
     returnDate: "20th June, 2025",
-    status: "BORROWED",
+    status: BookStatus.BORROWED,
+  },
+  {
+    serialNo: 3,
+    bookId: "askdfj90234",
+    bookName: "Paradoxical Sajid",
+    authorName: "Arif Azad",
+    purchaseDate: "19th May, 2025",
+    returnDate: "20th June, 2025",
+    status: BookStatus.TIME_EXCEEDED,
   },
 ];

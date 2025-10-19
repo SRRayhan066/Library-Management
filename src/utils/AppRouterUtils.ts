@@ -7,4 +7,5 @@ export const AppRouterUtils = {
   MEMBER_DETAILS: (memberId: string) => `/members/${memberId}`,
   SETTINGS: "/settings",
   HELP_AND_SUPPORT: "/help-and-support",
+  PROFILE: "/profile",
 };

@@ -20,7 +20,7 @@ export default function InputField({
   const fieldId = id || label?.toLowerCase().replace(/\s+/g, "-");
 
   return (
-    <div className="w-full space-y-1">
+    <div className={`w-full space-y-1 ${className}`}>
       {label && (
         <Label htmlFor={fieldId} className="text-sm font-medium">
           {label}
@@ -40,7 +40,7 @@ export default function InputField({
             id={fieldId}
             className={`${
               error ? "border-red-500 focus-visible:ring-red-500" : ""
-            } ${className}`}
+            }`}
             {...(textareaProps as any)}
             {...(props as any)}
           />
@@ -49,9 +49,7 @@ export default function InputField({
             id={fieldId}
             className={`${leftIcon ? "pl-10" : ""} ${
               rightIcon ? "pr-10" : ""
-            } ${
-              error ? "border-red-500 focus-visible:ring-red-500" : ""
-            } ${className}`}
+            } ${error ? "border-red-500 focus-visible:ring-red-500" : ""} `}
             {...(props as any)}
           />
         )}

@@ -20,6 +20,7 @@ import { NavItemsProps } from "@/types/NavItemsProps";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { isActivePath } from "@/utils/CommonUtils";
+import { AppRouterUtils } from "@/utils/AppRouterUtils";
 
 export function AppSidebar() {
   const pathName = usePathname();
@@ -51,15 +52,24 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem className="py-2">
-            <SidebarMenuButton className="h-full flex justify-start">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-              <div className="flex-col">
-                <h3 className="font-semibold">John Doe</h3>
-                <p className="text-[12px]">john@gmail.com</p>
-              </div>
+            <SidebarMenuButton
+              className={`h-full cursor-pointer ${
+                isActivePath(pathName, AppRouterUtils.PROFILE) && "bg-gray-800"
+              }`}
+            >
+              <Link
+                href={AppRouterUtils.PROFILE}
+                className="h-full flex justify-start gap-1.5"
+              >
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <div className="flex-col">
+                  <h3 className="font-semibold">John Doe</h3>
+                  <p className="text-[12px]">john@gmail.com</p>
+                </div>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -23,7 +23,7 @@ export default function MemberDetailsSection() {
         </div>
         <Separator />
       </div>
-      <div className="p-4 flex flex-col gap-4">
+      <div className="p-5 flex flex-col gap-4">
         <BasicInfo />
         <DataTable
           headers={TableHeaders}
