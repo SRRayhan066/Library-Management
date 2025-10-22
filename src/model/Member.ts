@@ -1,8 +1,15 @@
 import { UserType } from "@/constant/enum/UserType";
 import { REGEX_PATTERNS } from "@/lib/regex";
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-const MemberSchema = new Schema(
+interface IMember extends Document {
+  email: string;
+  password: string;
+  userType: UserType;
+  referenceId?: mongoose.Types.ObjectId | null;
+}
+
+const MemberSchema = new Schema<IMember>(
   {
     email: {
       type: String,
@@ -25,6 +32,14 @@ const MemberSchema = new Schema(
       },
       default: UserType.STUDENT,
     },
+    referenceId: {
+      type: Schema.Types.ObjectId,
+      ref: "students",
+      required(this: IMember): boolean {
+        return this.userType === UserType.STUDENT;
+      },
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -32,6 +47,6 @@ const MemberSchema = new Schema(
 );
 
 const Member =
-  mongoose.models.members || mongoose.model("members", MemberSchema);
+  mongoose.models.members || mongoose.model<IMember>("members", MemberSchema);
 
 export default Member;

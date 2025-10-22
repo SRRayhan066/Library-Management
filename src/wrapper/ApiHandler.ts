@@ -14,7 +14,7 @@ export const apiHandler = (handler: ApiFunction) => {
 
       const status = result?.status || HttpStatusCode.OK;
 
-      return NextResponse.json(
+      const response = NextResponse.json(
         {
           status,
           data: result.data || result,
@@ -22,6 +22,16 @@ export const apiHandler = (handler: ApiFunction) => {
         },
         { status }
       );
+
+      if (result.token) {
+        response.cookies.set({
+          name: "auth_token",
+          value: result.token,
+          httpOnly: true,
+        });
+      }
+
+      return response;
     } catch (error: any) {
       const statusCode =
         error instanceof ApiError
