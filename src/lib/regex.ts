@@ -10,4 +10,6 @@ export const REGEX_PATTERNS = {
   EXTRACT_DEPARTMENT: /^([a-z]+)_\d{15}@lus\.ac\.bd$/,
 
   EXTRACT_EMAIL_DIGITS: /\d{15}/,
+
+  NAME: /^[a-zA-Z\s]{3,}$/,
 };

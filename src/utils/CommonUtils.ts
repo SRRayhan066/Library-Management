@@ -7,3 +7,19 @@ export function isActivePath(currentPath: string, itemPath: string): boolean {
 
   return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
 }
+
+export const jsonObject = (data: any) => {
+  if (!data) return data;
+
+  if (data.toJSON && typeof data.toJSON === "function") {
+    return data.toJSON();
+  }
+
+  if (Array.isArray(data)) {
+    return data.map((item) =>
+      item.toJSON && typeof item.toJSON === "function" ? item.toJSON() : item
+    );
+  }
+
+  return data;
+};

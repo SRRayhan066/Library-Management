@@ -1,5 +1,5 @@
 import { UserType } from "@/constant/enum/UserType";
-import { REGEX_PATTERNS } from "@/lib/Regex";
+import { REGEX_PATTERNS } from "@/lib/regex";
 import mongoose, { Schema } from "mongoose";
 
 const MemberSchema = new Schema(
@@ -10,6 +10,7 @@ const MemberSchema = new Schema(
       match: [REGEX_PATTERNS.EMAIL, "Invalid email"],
       lowercase: true,
       trim: true,
+      unique: true,
     },
     password: {
       type: String,
@@ -30,6 +31,7 @@ const MemberSchema = new Schema(
   }
 );
 
-const Member = mongoose.models.member || mongoose.model("member", MemberSchema);
+const Member =
+  mongoose.models.members || mongoose.model("members", MemberSchema);
 
 export default Member;

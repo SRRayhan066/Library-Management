@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { REGEX_PATTERNS } from "@/lib/Regex";
+import { REGEX_PATTERNS } from "@/lib/regex";
 import { Department } from "@/constant/enum/Department";
 
 const studentSchema = new Schema(
@@ -12,6 +12,7 @@ const studentSchema = new Schema(
         "Student ID must be exactly 16 digits",
       ],
       trim: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -19,6 +20,12 @@ const studentSchema = new Schema(
       match: [REGEX_PATTERNS.STUDENT_EMAIL, "Invalid student email format"],
       lowercase: true,
       trim: true,
+      unique: true,
+    },
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+      match: [REGEX_PATTERNS.NAME, "Invalid name format"],
     },
     department: {
       type: String,
@@ -41,6 +48,6 @@ const studentSchema = new Schema(
 );
 
 const Student =
-  mongoose.models.student || mongoose.model("student", studentSchema);
+  mongoose.models.students || mongoose.model("students", studentSchema);
 
 export default Student;
