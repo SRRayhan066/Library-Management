@@ -1,6 +1,7 @@
 export const MESSAGE = {
   API: {
     USER_CREATED: "User successfully created",
+    GET_STUDENT: "Student information get successfully",
     ERROR: {
       USER_CREATION_FAILED: "User creation failed",
       STUDENT_NOT_FOUND: "Student not found",
