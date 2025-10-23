@@ -7,7 +7,7 @@ import { MESSAGE } from "@/lib/message";
 
 export const POST = apiHandler(async (req: NextRequest) => {
   const reqBody = await req.json();
-  await validateMember(reqBody);
+  // await validateMember(reqBody);
   const result = await AuthController.signUp(reqBody);
   return {
     data: result,
