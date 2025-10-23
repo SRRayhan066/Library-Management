@@ -9,5 +9,9 @@ export const signUpApi = () => {
 };
 
 export const signInApi = () => {
-  return Api.POST("/api/sign-in")
-}
+  return Api.POST("/api/sign-in");
+};
+
+export const signOutApi = () => {
+  return Api.POST("api/sign-out");
+};

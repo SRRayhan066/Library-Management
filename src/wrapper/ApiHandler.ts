@@ -29,11 +29,13 @@ export const apiHandler = <Params extends Record<string, string> = {}>(
         { status }
       );
 
-      if (result.token) {
+      if ("token" in result) {
         response.cookies.set({
           name: "auth_token",
           value: result.token,
           httpOnly: true,
+          maxAge: result.token === "" ? 0 : undefined,
+          path: "/",
         });
       }
 

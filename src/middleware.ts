@@ -16,13 +16,18 @@ export async function middleware(request: NextRequest) {
   const currentPath = request.nextUrl.pathname;
   const token = request.cookies.get("auth_token")?.value || "";
 
-  if (publicPaths.includes(currentPath) && token) {
+  const isPublic = publicPaths.includes(currentPath);
+  const isProtected = protectedPath.includes(currentPath);
+
+  // If user is logged in and tries to access public page, redirect to dashboard
+  if (isPublic && token) {
     return NextResponse.redirect(
       new URL(AppRouterUtils.DASHBOARD, request.url)
     );
   }
 
-  if (protectedPath.includes(currentPath) && !token) {
+  // If user is NOT logged in and tries to access protected page, redirect to ROOT
+  if (isProtected && !token) {
     return NextResponse.redirect(new URL(AppRouterUtils.ROOT, request.url));
   }
 

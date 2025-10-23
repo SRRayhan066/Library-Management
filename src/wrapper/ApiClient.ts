@@ -23,6 +23,7 @@ export const ApiClient = async <T = any>(
   const options: RequestInit = {
     method,
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
   };
 
   // Attach body only for non-GET

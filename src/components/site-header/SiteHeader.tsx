@@ -1,9 +1,25 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { IconBellFilled, IconBellRingingFilled } from "@tabler/icons-react";
+import { signOutApi } from "@/constant/ApiRoutes";
+import { AppRouterUtils } from "@/utils/AppRouterUtils";
+import { isErrorResponse } from "@/utils/CommonUtils";
+import { ApiClient } from "@/wrapper/ApiClient";
+import { IconBellFilled } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 export function SiteHeader() {
+  const router = useRouter();
+  const handleLogOut = async () => {
+    const response = await ApiClient(signOutApi);
+    if (isErrorResponse(response)) {
+      console.log({ response });
+      return;
+    }
+    router.replace(AppRouterUtils.ROOT);
+  };
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) sticky top-0 bg-[var(--background)] z-10">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -14,15 +30,13 @@ export function SiteHeader() {
         />
         <div className="ml-auto flex items-center gap-2">
           <IconBellFilled />
-          <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="#"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="dark:text-foreground"
-            >
-              Logout
-            </a>
+          <Button
+            variant="ghost"
+            onClick={handleLogOut}
+            size="sm"
+            className="hidden sm:flex cursor-pointer"
+          >
+            Logout
           </Button>
         </div>
       </div>
