@@ -10,7 +10,7 @@ import { AppRouterUtils } from "@/utils/AppRouterUtils";
 
 export function useLoginForm() {
   const router = useRouter();
-  const { register, control, handleSubmit, getValues, setValue } = useForm({
+  const { register, handleSubmit } = useForm({
     mode: "onChange",
     defaultValues: {
       [AuthField.EMAIL]: "",
