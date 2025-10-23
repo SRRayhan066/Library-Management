@@ -6,7 +6,8 @@ import { StudentController } from "@/controllers/StudentController";
 
 export const GET = apiHandler(
   async (req: NextRequest, context?: { params?: { email: string } }) => {
-    const email = context?.params?.email;
+    const params = await context?.params;
+    const email = params?.email;
 
     if (!email) {
       return {

@@ -13,7 +13,7 @@ import { SignUpFormField } from "@/constant/form-field/SignUpFormField";
 import { getValidationRules } from "@/validator/client-validate/SignUpValidate";
 
 export default function SignUpForm() {
-  const { register, control, handleSubmit } = useSignUpForm();
+  const { register, control, handleSubmit, fetchUser } = useSignUpForm();
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-5">
@@ -28,6 +28,7 @@ export default function SignUpForm() {
           SignUpFormField.EMAIL,
           getValidationRules(SignUpFormField.EMAIL)
         )}
+        onBlur={fetchUser}
       />
       <Input
         placeholder="Name"

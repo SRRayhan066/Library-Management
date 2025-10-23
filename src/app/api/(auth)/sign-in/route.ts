@@ -12,7 +12,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
   return {
     data: result?.data,
     token: result?.token,
-    status: HttpStatusCode.CREATED,
+    status: HttpStatusCode.OK,
     message: MESSAGE.API.USER_CREATED,
   };
 });
