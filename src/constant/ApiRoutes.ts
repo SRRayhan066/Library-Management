@@ -7,3 +7,7 @@ export const getStudentApi = (email: string) => {
 export const signUpApi = () => {
   return Api.POST("/api/sign-up");
 };
+
+export const signInApi = () => {
+  return Api.POST("/api/sign-in")
+}

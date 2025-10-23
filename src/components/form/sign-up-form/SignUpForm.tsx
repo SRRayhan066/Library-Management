@@ -9,8 +9,8 @@ import PasswordInput from "@/components/password-input/PasswordInput";
 import Link from "next/link";
 import { AuthState } from "@/constant/enum/AuthState";
 import { useSignUpForm } from "@/hooks/use-signup-form";
-import { SignUpFormField } from "@/constant/form-field/SignUpFormField";
-import { getValidationRules } from "@/validator/client-validate/SignUpValidate";
+import { AuthField } from "@/constant/form-field/AuthField";
+import { getValidationRules } from "@/validator/client-validate/AuthFieldValidate";
 
 export default function SignUpForm() {
   const { register, control, handleSubmit, fetchUser } = useSignUpForm();
@@ -24,48 +24,42 @@ export default function SignUpForm() {
       <Input
         type="email"
         placeholder="Email"
-        {...register(
-          SignUpFormField.EMAIL,
-          getValidationRules(SignUpFormField.EMAIL)
-        )}
+        {...register(AuthField.EMAIL, getValidationRules(AuthField.EMAIL))}
         onBlur={fetchUser}
       />
       <Input
         placeholder="Name"
-        {...register(
-          SignUpFormField.NAME,
-          getValidationRules(SignUpFormField.NAME)
-        )}
+        {...register(AuthField.NAME, getValidationRules(AuthField.NAME))}
         disabled
       />
       <Input
         placeholder="Student Id"
         {...register(
-          SignUpFormField.STUDENT_ID,
-          getValidationRules(SignUpFormField.STUDENT_ID)
+          AuthField.STUDENT_ID,
+          getValidationRules(AuthField.STUDENT_ID)
         )}
         disabled
       />
       <Dropdown
         placeholder="Select Department"
         options={DepartmentOptions}
-        name={SignUpFormField.DEPARTMENT}
+        name={AuthField.DEPARTMENT}
         control={control}
-        rules={getValidationRules(SignUpFormField.DEPARTMENT)}
+        rules={getValidationRules(AuthField.DEPARTMENT)}
         disabled
       />
       <PasswordInput
         placeholder="Password"
         {...register(
-          SignUpFormField.PASSWORD,
-          getValidationRules(SignUpFormField.PASSWORD)
+          AuthField.PASSWORD,
+          getValidationRules(AuthField.PASSWORD)
         )}
       />
       <PasswordInput
         placeholder="Confirm Password"
         {...register(
-          SignUpFormField.CONFIRM_PASSWORD,
-          getValidationRules(SignUpFormField.CONFIRM_PASSWORD)
+          AuthField.CONFIRM_PASSWORD,
+          getValidationRules(AuthField.CONFIRM_PASSWORD)
         )}
       />
       <Button type="submit" className="w-full cursor-pointer">

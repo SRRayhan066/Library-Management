@@ -1,27 +1,26 @@
 "use client";
 
 import { getStudentApi, signUpApi } from "@/constant/ApiRoutes";
-import { SignUpFormField } from "@/constant/form-field/SignUpFormField";
+import { AuthField } from "@/constant/form-field/AuthField";
 import { isErrorResponse } from "@/utils/CommonUtils";
 import { ApiClient } from "@/wrapper/ApiClient";
 import { useForm } from "react-hook-form";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AuthState } from "@/constant/enum/AuthState";
 
 export function useSignUpForm() {
   const router = useRouter();
-  const pathName = usePathname();
   const searchParams = useSearchParams();
 
   const { register, control, handleSubmit, getValues, setValue } = useForm({
     mode: "onChange",
     defaultValues: {
-      [SignUpFormField.EMAIL]: "",
-      [SignUpFormField.NAME]: "",
-      [SignUpFormField.STUDENT_ID]: "",
-      [SignUpFormField.DEPARTMENT]: "",
-      [SignUpFormField.PASSWORD]: "",
-      [SignUpFormField.CONFIRM_PASSWORD]: "",
+      [AuthField.EMAIL]: "",
+      [AuthField.NAME]: "",
+      [AuthField.STUDENT_ID]: "",
+      [AuthField.DEPARTMENT]: "",
+      [AuthField.PASSWORD]: "",
+      [AuthField.CONFIRM_PASSWORD]: "",
     },
   });
 
@@ -36,8 +35,8 @@ export function useSignUpForm() {
   // should improve type
   const onSubmit = async (data: any) => {
     const payload = {
-      email: data[SignUpFormField.EMAIL],
-      password: data[SignUpFormField.PASSWORD],
+      email: data[AuthField.EMAIL],
+      password: data[AuthField.PASSWORD],
     };
     const response = await ApiClient(signUpApi, payload);
 
@@ -52,16 +51,16 @@ export function useSignUpForm() {
   };
 
   const fetchUser = async () => {
-    const email = getValues(SignUpFormField.EMAIL);
+    const email = getValues(AuthField.EMAIL);
     const response = await ApiClient(getStudentApi, email);
     if (isErrorResponse(response)) {
       console.log({ response });
       return;
     }
     const { name, studentId, department } = response?.data?.student || {};
-    setValue(SignUpFormField.NAME, name);
-    setValue(SignUpFormField.STUDENT_ID, studentId);
-    setValue(SignUpFormField.DEPARTMENT, department);
+    setValue(AuthField.NAME, name);
+    setValue(AuthField.STUDENT_ID, studentId);
+    setValue(AuthField.DEPARTMENT, department);
   };
 
   return {

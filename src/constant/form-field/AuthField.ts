@@ -1,4 +1,4 @@
-export const SignUpFormField = {
+export const AuthField = {
   NAME: "name",
   STUDENT_ID: "studentId",
   DEPARTMENT: "department",
