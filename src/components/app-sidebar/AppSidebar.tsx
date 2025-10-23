@@ -12,18 +12,17 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  primaryItems,
-  secondaryItems,
-} from "@/constant/default-values/SidebarOptions";
+import { getNavItems } from "@/constant/default-values/SidebarOptions";
 import { NavItemsProps } from "@/types/NavItemsProps";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { isActivePath } from "@/utils/CommonUtils";
 import { AppRouterUtils } from "@/utils/AppRouterUtils";
+import { UserToken } from "@/types/UserToken";
 
-export function AppSidebar() {
+export function AppSidebar({ user = null }: { user?: UserToken | null }) {
   const pathName = usePathname();
+  const { primaryItems, secondaryItems } = getNavItems(user?.userType);
   return (
     <Sidebar>
       <SidebarHeader>

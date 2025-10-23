@@ -7,8 +7,18 @@ import {
   IconHelpCircleFilled,
   IconFilesFilled,
 } from "@tabler/icons-react";
+import { UserType } from "../enum/UserType";
 
-export const primaryItems = [
+export const getNavItems = (userType: string | undefined) => {
+  const primaryItems =
+    userType === UserType.ADMIN
+      ? [...basePrimaryItems, ...adminPrimaryItems]
+      : [...basePrimaryItems];
+
+  return { primaryItems, secondaryItems };
+};
+
+const basePrimaryItems = [
   {
     title: "Dashboard",
     url: "/dashboard",
@@ -19,6 +29,9 @@ export const primaryItems = [
     url: "/books",
     icon: IconBookFilled,
   },
+];
+
+const adminPrimaryItems = [
   {
     title: "Members",
     url: "/members",
@@ -36,7 +49,7 @@ export const primaryItems = [
   },
 ];
 
-export const secondaryItems = [
+const secondaryItems = [
   {
     title: "Settings",
     url: "/settings",

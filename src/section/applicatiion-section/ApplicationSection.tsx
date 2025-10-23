@@ -1,3 +1,5 @@
+"use client";
+
 import DataTable from "@/components/DataTable/DataTable";
 import {
   InputGroup,
@@ -12,8 +14,12 @@ import {
 } from "@/constant/default-values/ApplicationTable";
 import Dropdown from "@/components/dropdown/Dropdown";
 import { ApplicationStatusOptions } from "@/constant/default-values/ApplicationStatusType";
+import { useForm } from "react-hook-form";
 
 export default function ApplicationSection() {
+  const { control } = useForm({
+    mode: "onChange",
+  });
   return (
     <section className="h-full">
       <div className="sticky top-[48px] bg-[var(--background)] ">
@@ -38,6 +44,8 @@ export default function ApplicationSection() {
           renderAction={(value) => (
             <div className="w-[120px] flex justify-end">
               <Dropdown
+                name="genre"
+                control={control}
                 defaultValue={value?.status}
                 placeholder="Status"
                 options={ApplicationStatusOptions}

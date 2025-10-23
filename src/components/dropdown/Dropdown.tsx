@@ -11,7 +11,7 @@ import { Controller, Control } from "react-hook-form";
 interface DropdownWithFormProps extends DropdownProps {
   name: string;
   control: Control<any>;
-  rules: {};
+  rules?: {};
 }
 
 export default function Dropdown({

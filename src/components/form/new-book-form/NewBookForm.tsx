@@ -9,18 +9,16 @@ import { Button } from "@/components/ui/button";
 export default function NewBookForm() {
   return (
     <form className="flex flex-col gap-5">
-      <InputFile />
+      <div className="h-[200px]">
+        <InputFile />
+      </div>
 
       <div className="flex items-center gap-2">
         <InputField label="Title" placeholder="Book Name" required />
         <InputField label="Author" placeholder="Author Name" required />
       </div>
       <div className="flex gap-2">
-        <InputField
-          label="ISBN"
-          placeholder="ISBN No."
-          className="bg-red-700"
-        />
+        <InputField label="ISBN" placeholder="ISBN No." />
         <DropdownField
           label="Genre"
           placeholder="Select Genre"

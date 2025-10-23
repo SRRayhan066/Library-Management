@@ -11,9 +11,13 @@ import { BookStatusOptions } from "@/constant/default-values/BookStatusOptions";
 import SuspendModal from "@/modals/suspend-modal/SuspendModal";
 import TablePagination from "@/components/table-pagination/TablePagination";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 export default function MemberDetailsSection() {
   const [currentPage, setCurrentPage] = useState(1);
+  const { control } = useForm({
+    mode: "onChange",
+  });
   return (
     <section className="h-full relative">
       <div className="sticky top-[48px] bg-[var(--background)] ">
@@ -32,6 +36,8 @@ export default function MemberDetailsSection() {
           renderAction={(value) => (
             <div className="w-[120px] flex justify-end">
               <Dropdown
+                name="genre"
+                control={control}
                 defaultValue={value?.status}
                 placeholder="Status"
                 options={BookStatusOptions}

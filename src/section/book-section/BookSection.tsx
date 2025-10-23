@@ -1,3 +1,5 @@
+"use client";
+
 import { Separator } from "@/components/ui/separator";
 import {
   InputGroup,
@@ -9,8 +11,12 @@ import Dropdown from "@/components/dropdown/Dropdown";
 import { bookGenres, demoData } from "@/constant/default-values/BookGenres";
 import CardItem from "@/components/card-Item/CardItem";
 import AddBookSection from "../add-book-section/AddBookSection";
+import { useForm } from "react-hook-form";
 
 export default function BookSection() {
+  const { control } = useForm({
+    mode: "onChange",
+  });
   return (
     <section className="h-full">
       <div className="sticky top-[48px] bg-[var(--background)] ">
@@ -25,7 +31,12 @@ export default function BookSection() {
             </InputGroup>
 
             <div className="w-1/4">
-              <Dropdown placeholder="Select Genre" options={bookGenres} />
+              <Dropdown
+                name="genre"
+                control={control}
+                placeholder="Select Genre"
+                options={bookGenres}
+              />
             </div>
             <AddBookSection />
           </div>

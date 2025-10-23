@@ -1,17 +1,15 @@
 import React from "react";
-import {
-  SidebarProvider,
-  SidebarTrigger,
-  SidebarInset,
-} from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar/AppSidebar";
 import { SiteHeader } from "@/components/site-header/SiteHeader";
+import { getServerAuthUser } from "@/utils/UserUtils";
 
-export default function ProtectedLayout({
+export default async function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const user = await getServerAuthUser();
   return (
     <SidebarProvider
       style={
@@ -21,7 +19,7 @@ export default function ProtectedLayout({
         } as React.CSSProperties
       }
     >
-      <AppSidebar/>
+      <AppSidebar />
       <SidebarInset>
         <SiteHeader />
         {children}
