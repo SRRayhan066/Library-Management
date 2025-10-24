@@ -3,7 +3,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar/AppSidebar";
 import { SiteHeader } from "@/components/site-header/SiteHeader";
 import { getServerAuthUser } from "@/utils/UserUtils";
-import { AuthProvider } from "@/providers/ApplicationProvider";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export default async function ProtectedLayout({
   children,

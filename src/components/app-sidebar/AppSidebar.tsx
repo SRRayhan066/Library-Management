@@ -18,7 +18,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { isActivePath } from "@/utils/CommonUtils";
 import { AppRouterUtils } from "@/utils/AppRouterUtils";
-import { useAuthUser } from "@/providers/ApplicationProvider";
+import { useAuthUser } from "@/providers/AuthProvider";
 
 export function AppSidebar() {
   const pathName = usePathname();
