@@ -26,7 +26,6 @@ export function useSignUpForm() {
     formState: { errors, isValid, isSubmitting },
     handleSubmit,
     getValues,
-    setValue,
     reset,
   } = useForm({
     mode: "onChange",
@@ -71,20 +70,32 @@ export function useSignUpForm() {
   };
 
   useDebounce(email, async (value) => {
-    if (!value || value.trim() === "") {
+    if (!value?.trim()) return;
+
+    try {
+      setIsFetching(true);
+      const response = await ApiClient(getStudentApi, value);
+
+      const fields = isErrorResponse(response)
+        ? {
+            [AuthField.NAME]: "",
+            [AuthField.STUDENT_ID]: "",
+            [AuthField.DEPARTMENT]: "",
+          }
+        : {
+            [AuthField.NAME]: response?.data?.student?.name,
+            [AuthField.STUDENT_ID]: response?.data?.student?.studentId,
+            [AuthField.DEPARTMENT]: response?.data?.student?.department,
+          };
+
+      if (isErrorResponse(response)) {
+        showErrorToast("Failed", response?.error);
+      }
+
+      reset({ ...getValues(), ...fields });
+    } finally {
       setIsFetching(false);
-      return;
     }
-    setIsFetching(true);
-    const response = await ApiClient(getStudentApi, value);
-    const { name, studentId, department } = response?.data?.student || {};
-    reset({
-      ...getValues(),
-      [AuthField.NAME]: name,
-      [AuthField.STUDENT_ID]: studentId,
-      [AuthField.DEPARTMENT]: department,
-    });
-    setIsFetching(false);
   });
 
   return {

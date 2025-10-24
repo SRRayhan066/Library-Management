@@ -12,11 +12,14 @@ import { bookGenres, demoData } from "@/constant/default-values/BookGenres";
 import CardItem from "@/components/card-Item/CardItem";
 import AddBookSection from "../add-book-section/AddBookSection";
 import { useForm } from "react-hook-form";
+import { useAuthUser } from "@/providers/AuthProvider";
+import { UserType } from "@/constant/enum/UserType";
 
 export default function BookSection() {
   const { control } = useForm({
     mode: "onChange",
   });
+  const { user } = useAuthUser();
   return (
     <section className="h-full">
       <div className="sticky top-[48px] bg-[var(--background)] ">
@@ -38,7 +41,7 @@ export default function BookSection() {
                 options={bookGenres}
               />
             </div>
-            <AddBookSection />
+            {user?.userType === UserType.ADMIN && <AddBookSection />}
           </div>
         </div>
         <Separator />
