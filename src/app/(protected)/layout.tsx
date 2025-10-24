@@ -3,6 +3,7 @@ import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar/AppSidebar";
 import { SiteHeader } from "@/components/site-header/SiteHeader";
 import { getServerAuthUser } from "@/utils/UserUtils";
+import { AuthProvider } from "@/providers/ApplicationProvider";
 
 export default async function ProtectedLayout({
   children,
@@ -11,19 +12,21 @@ export default async function ProtectedLayout({
 }) {
   const user = await getServerAuthUser();
   return (
-    <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
-          "--header-height": "calc(var(--spacing) * 12)",
-        } as React.CSSProperties
-      }
-    >
-      <AppSidebar user={user} />
-      <SidebarInset>
-        <SiteHeader />
-        {children}
-      </SidebarInset>
-    </SidebarProvider>
+    <AuthProvider user={user}>
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "calc(var(--spacing) * 72)",
+            "--header-height": "calc(var(--spacing) * 12)",
+          } as React.CSSProperties
+        }
+      >
+        <AppSidebar />
+        <SidebarInset>
+          <SiteHeader />
+          {children}
+        </SidebarInset>
+      </SidebarProvider>
+    </AuthProvider>
   );
 }

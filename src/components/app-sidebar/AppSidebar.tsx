@@ -18,10 +18,11 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { isActivePath } from "@/utils/CommonUtils";
 import { AppRouterUtils } from "@/utils/AppRouterUtils";
-import { UserToken } from "@/types/UserToken";
+import { useAuthUser } from "@/providers/ApplicationProvider";
 
-export function AppSidebar({ user = null }: { user?: UserToken | null }) {
+export function AppSidebar() {
   const pathName = usePathname();
+  const { user } = useAuthUser();
   const { primaryItems, secondaryItems } = getNavItems(user?.userType);
   return (
     <Sidebar>
