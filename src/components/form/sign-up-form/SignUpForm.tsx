@@ -21,12 +21,12 @@ export default function SignUpForm() {
     isValid,
     handleSubmit,
     errors,
-    fetchUser,
     showPassword,
     showConfirmPassword,
     triggerShowPassword,
     triggerShowConfirmPassword,
     isFetching,
+    handleEmailChange,
   } = useSignUpForm();
 
   return (
@@ -39,8 +39,10 @@ export default function SignUpForm() {
         type="email"
         placeholder="Email"
         error={errors[AuthField.EMAIL]?.message as string}
-        {...register(AuthField.EMAIL, getValidationRules(AuthField.EMAIL))}
-        onBlur={fetchUser}
+        {...register(AuthField.EMAIL, {
+          ...getValidationRules(AuthField.EMAIL),
+          onChange: handleEmailChange,
+        })}
         rightIcon={isFetching && <Spinner />}
       />
       <Input

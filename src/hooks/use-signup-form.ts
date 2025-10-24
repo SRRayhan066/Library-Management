@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AuthState } from "@/constant/enum/AuthState";
 import { useState } from "react";
+import { useDebounce } from "./use-debounce";
 
 export function useSignUpForm() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export function useSignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [email, setEmail] = useState("");
 
   const {
     register,
@@ -23,6 +25,7 @@ export function useSignUpForm() {
     handleSubmit,
     getValues,
     setValue,
+    reset,
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -61,20 +64,26 @@ export function useSignUpForm() {
     updateQueryParams("authState", AuthState.LOG_IN);
   };
 
-  const fetchUser = async () => {
-    const email = getValues(AuthField.EMAIL);
-    setIsFetching(true);
-    const response = await ApiClient(getStudentApi, email);
-    if (isErrorResponse(response)) {
-      console.log({ response });
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  useDebounce(email, async (value) => {
+    if (!value || value.trim() === "") {
+      setIsFetching(false);
       return;
     }
+    setIsFetching(true);
+    const response = await ApiClient(getStudentApi, value);
     const { name, studentId, department } = response?.data?.student || {};
-    setValue(AuthField.NAME, name);
-    setValue(AuthField.STUDENT_ID, studentId);
-    setValue(AuthField.DEPARTMENT, department);
+    reset({
+      ...getValues(),
+      [AuthField.NAME]: name,
+      [AuthField.STUDENT_ID]: studentId,
+      [AuthField.DEPARTMENT]: department,
+    });
     setIsFetching(false);
-  };
+  });
 
   return {
     register,
@@ -82,11 +91,11 @@ export function useSignUpForm() {
     errors,
     isValid,
     handleSubmit: handleSubmit(onSubmit),
-    fetchUser,
     showPassword,
     triggerShowPassword: () => setShowPassword((prev) => !prev),
     showConfirmPassword,
     triggerShowConfirmPassword: () => setShowConfirmPassword((prev) => !prev),
     isFetching,
+    handleEmailChange,
   };
 }
