@@ -9,15 +9,19 @@ import { isErrorResponse } from "@/utils/CommonUtils";
 import { ApiClient } from "@/wrapper/ApiClient";
 import { IconBellFilled } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/providers/AlertProvider";
 
 export function SiteHeader() {
   const router = useRouter();
+  const { showSuccessToast, showErrorToast } = useToast();
   const handleLogOut = async () => {
     const response = await ApiClient(signOutApi);
     if (isErrorResponse(response)) {
-      console.log({ response });
+      showErrorToast("Log out failed", response?.error);
       return;
     }
+
+    showSuccessToast("Successful", "Successfully log out");
     router.replace(AppRouterUtils.ROOT);
   };
   return (

@@ -9,6 +9,7 @@ import { AuthField } from "@/constant/form-field/AuthField";
 import { getValidationRules } from "@/validator/client-validate/AuthFieldValidate";
 import InputField from "@/components/input-field/InputField";
 import { Eye, EyeOff } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function LoginForm() {
   const {
@@ -18,6 +19,7 @@ export default function LoginForm() {
     handleSubmit,
     showPassword,
     triggerShowPassword,
+    isSubmitting,
   } = useLoginForm();
 
   return (
@@ -51,7 +53,7 @@ export default function LoginForm() {
         }
       />
       <Button disabled={!isValid} className="w-full cursor-pointer">
-        Login
+        {isSubmitting && <Spinner />} Login
       </Button>
       <Separator />
       <p>

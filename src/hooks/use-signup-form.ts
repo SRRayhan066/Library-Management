@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { AuthState } from "@/constant/enum/AuthState";
 import { useState } from "react";
 import { useDebounce } from "./use-debounce";
+import { useToast } from "@/providers/AlertProvider";
 
 export function useSignUpForm() {
   const router = useRouter();
@@ -17,11 +18,12 @@ export function useSignUpForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const [email, setEmail] = useState("");
+  const { showSuccessToast, showErrorToast } = useToast();
 
   const {
     register,
     control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     handleSubmit,
     getValues,
     setValue,
@@ -55,11 +57,11 @@ export function useSignUpForm() {
     const response = await ApiClient(signUpApi, payload);
 
     if (isErrorResponse(response)) {
-      console.log({ response });
+      showErrorToast("Registration failed", response?.error);
       return;
     }
 
-    // show success toast
+    showSuccessToast("Successful", "User successfully created");
 
     updateQueryParams("authState", AuthState.LOG_IN);
   };
@@ -90,6 +92,7 @@ export function useSignUpForm() {
     control,
     errors,
     isValid,
+    isSubmitting,
     handleSubmit: handleSubmit(onSubmit),
     showPassword,
     triggerShowPassword: () => setShowPassword((prev) => !prev),

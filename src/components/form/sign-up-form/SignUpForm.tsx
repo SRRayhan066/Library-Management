@@ -27,6 +27,7 @@ export default function SignUpForm() {
     triggerShowConfirmPassword,
     isFetching,
     handleEmailChange,
+    isSubmitting,
   } = useSignUpForm();
 
   return (
@@ -43,21 +44,23 @@ export default function SignUpForm() {
           ...getValidationRules(AuthField.EMAIL),
           onChange: handleEmailChange,
         })}
-        rightIcon={isFetching && <Spinner />}
       />
-      <Input
+      <InputField
         placeholder="Name"
         {...register(AuthField.NAME, getValidationRules(AuthField.NAME))}
         disabled
+        rightIcon={isFetching && <Spinner />}
       />
-      <Input
+      <InputField
         placeholder="Student Id"
         {...register(
           AuthField.STUDENT_ID,
           getValidationRules(AuthField.STUDENT_ID)
         )}
         disabled
+        rightIcon={isFetching && <Spinner />}
       />
+
       <Dropdown
         placeholder="Select Department"
         options={DepartmentOptions}
@@ -65,6 +68,7 @@ export default function SignUpForm() {
         control={control}
         rules={getValidationRules(AuthField.DEPARTMENT)}
         disabled
+        loading={isFetching}
       />
       <InputField
         {...register(
@@ -107,7 +111,7 @@ export default function SignUpForm() {
         type="submit"
         className="w-full cursor-pointer"
       >
-        Register
+        {isSubmitting && <Spinner />} Register
       </Button>
       <Separator />
       <p>
