@@ -12,4 +12,7 @@ export const REGEX_PATTERNS = {
   EXTRACT_EMAIL_DIGITS: /\d{15}/,
 
   NAME: /^[a-zA-Z\s]{3,}$/,
+
+  PASSWORD:
+    /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/,
 };

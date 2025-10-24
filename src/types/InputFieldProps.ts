@@ -1,7 +1,7 @@
 export interface InputFieldProps
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement> {
   label?: string;
-  type?: "input" | "textarea";
+  inputType?: "input" | "textarea";
   required?: boolean;
   description?: string;
   error?: string;

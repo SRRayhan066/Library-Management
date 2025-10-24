@@ -34,7 +34,7 @@ export default function NewBookForm() {
 
       <InputField
         label="Description"
-        type="textarea"
+        inputType="textarea"
         placeholder="Description"
       />
 

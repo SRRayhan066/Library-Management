@@ -6,7 +6,7 @@ import { InputFieldProps } from "@/types/InputFieldProps";
 
 export default function InputField({
   label,
-  type = "input",
+  inputType = "input",
   required = false,
   description,
   error,
@@ -30,12 +30,12 @@ export default function InputField({
 
       <div className="relative">
         {leftIcon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 flex">
             {leftIcon}
           </div>
         )}
 
-        {type === "textarea" ? (
+        {inputType === "textarea" ? (
           <Textarea
             id={fieldId}
             className={`${
@@ -55,7 +55,7 @@ export default function InputField({
         )}
 
         {rightIcon && (
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 flex">
             {rightIcon}
           </div>
         )}

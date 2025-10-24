@@ -7,10 +7,16 @@ import { ApiClient } from "@/wrapper/ApiClient";
 import { useForm } from "react-hook-form";
 import { signInApi } from "@/constant/ApiRoutes";
 import { AppRouterUtils } from "@/utils/AppRouterUtils";
+import { useState } from "react";
 
 export function useLoginForm() {
   const router = useRouter();
-  const { register, handleSubmit } = useForm({
+  const [showPassword, setShowPassword] = useState(false);
+  const {
+    register,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm({
     mode: "onChange",
     defaultValues: {
       [AuthField.EMAIL]: "",
@@ -31,6 +37,10 @@ export function useLoginForm() {
 
   return {
     register,
+    errors,
+    isValid,
     handleSubmit: handleSubmit(onSubmit),
+    showPassword,
+    triggerShowPassword: () => setShowPassword((prev) => !prev),
   };
 }

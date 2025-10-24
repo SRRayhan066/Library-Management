@@ -5,15 +5,29 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Dropdown from "@/components/dropdown/Dropdown";
 import { DepartmentOptions } from "@/constant/default-values/DepartmentOptions";
-import PasswordInput from "@/components/password-input/PasswordInput";
 import Link from "next/link";
 import { AuthState } from "@/constant/enum/AuthState";
 import { useSignUpForm } from "@/hooks/use-signup-form";
 import { AuthField } from "@/constant/form-field/AuthField";
 import { getValidationRules } from "@/validator/client-validate/AuthFieldValidate";
+import InputField from "@/components/input-field/InputField";
+import { Eye, EyeOff } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function SignUpForm() {
-  const { register, control, handleSubmit, fetchUser } = useSignUpForm();
+  const {
+    register,
+    control,
+    isValid,
+    handleSubmit,
+    errors,
+    fetchUser,
+    showPassword,
+    showConfirmPassword,
+    triggerShowPassword,
+    triggerShowConfirmPassword,
+    isFetching,
+  } = useSignUpForm();
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-5">
@@ -21,11 +35,13 @@ export default function SignUpForm() {
       <p className="text-[14px]">
         Provide the following information for creating your account
       </p>
-      <Input
+      <InputField
         type="email"
         placeholder="Email"
+        error={errors[AuthField.EMAIL]?.message as string}
         {...register(AuthField.EMAIL, getValidationRules(AuthField.EMAIL))}
         onBlur={fetchUser}
+        rightIcon={isFetching && <Spinner />}
       />
       <Input
         placeholder="Name"
@@ -48,21 +64,47 @@ export default function SignUpForm() {
         rules={getValidationRules(AuthField.DEPARTMENT)}
         disabled
       />
-      <PasswordInput
-        placeholder="Password"
+      <InputField
         {...register(
           AuthField.PASSWORD,
           getValidationRules(AuthField.PASSWORD)
         )}
+        type={showPassword ? "text" : "password"}
+        placeholder="Password"
+        error={errors[AuthField.PASSWORD]?.message as string}
+        rightIcon={
+          <button
+            type="button"
+            onClick={triggerShowPassword}
+            className="cursor-pointer"
+          >
+            {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+          </button>
+        }
       />
-      <PasswordInput
-        placeholder="Confirm Password"
+      <InputField
         {...register(
           AuthField.CONFIRM_PASSWORD,
           getValidationRules(AuthField.CONFIRM_PASSWORD)
         )}
+        type={showConfirmPassword ? "text" : "password"}
+        placeholder="Confirm Password"
+        error={errors[AuthField.CONFIRM_PASSWORD]?.message as string}
+        rightIcon={
+          <button
+            type="button"
+            onClick={triggerShowConfirmPassword}
+            className="cursor-pointer"
+          >
+            {showConfirmPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+          </button>
+        }
       />
-      <Button type="submit" className="w-full cursor-pointer">
+      <Button
+        disabled={!isValid}
+        type="submit"
+        className="w-full cursor-pointer"
+      >
         Register
       </Button>
       <Separator />

@@ -1,17 +1,24 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { AuthState } from "@/constant/enum/AuthState";
 import Link from "next/link";
 import { useLoginForm } from "@/hooks/use-login-form";
 import { AuthField } from "@/constant/form-field/AuthField";
 import { getValidationRules } from "@/validator/client-validate/AuthFieldValidate";
-import PasswordInput from "@/components/password-input/PasswordInput";
+import InputField from "@/components/input-field/InputField";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function LoginForm() {
-  const { register, handleSubmit } = useLoginForm();
+  const {
+    register,
+    errors,
+    isValid,
+    handleSubmit,
+    showPassword,
+    triggerShowPassword,
+  } = useLoginForm();
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col items-center gap-5">
@@ -19,19 +26,33 @@ export default function LoginForm() {
       <p className="text-[14px]">
         Enter your email and password to login to your account
       </p>
-      <Input
+      <InputField
         type="email"
         placeholder="Email"
+        error={errors[AuthField.EMAIL]?.message as string}
         {...register(AuthField.EMAIL, getValidationRules(AuthField.EMAIL))}
       />
-      <PasswordInput
-        placeholder="Password"
+      <InputField
         {...register(
           AuthField.PASSWORD,
           getValidationRules(AuthField.PASSWORD)
         )}
+        type={showPassword ? "text" : "password"}
+        placeholder="Password"
+        error={errors[AuthField.PASSWORD]?.message as string}
+        rightIcon={
+          <button
+            type="button"
+            onClick={triggerShowPassword}
+            className="cursor-pointer"
+          >
+            {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+          </button>
+        }
       />
-      <Button className="w-full cursor-pointer">Login</Button>
+      <Button disabled={!isValid} className="w-full cursor-pointer">
+        Login
+      </Button>
       <Separator />
       <p>
         Don't have an account?{" "}
