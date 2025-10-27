@@ -97,6 +97,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               )}
 
               <button
+                type="button"
                 onClick={removeToast}
                 className="absolute top-3 right-3 rounded-sm opacity-70 hover:opacity-100 transition-opacity"
               >
