@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AppRouterUtils } from "./utils/AppRouterUtils";
+import { getMiddlewareAuthUser } from "./utils/UserUtils";
 
 const publicPaths = [AppRouterUtils.ROOT];
 const protectedPath = [
@@ -16,17 +17,17 @@ export async function middleware(request: NextRequest) {
   const currentPath = request.nextUrl.pathname;
   const token = request.cookies.get("auth_token")?.value || "";
 
+  const user = await getMiddlewareAuthUser(request);
+
   const isPublic = publicPaths.includes(currentPath);
   const isProtected = protectedPath.includes(currentPath);
 
-  // If user is logged in and tries to access public page, redirect to dashboard
   if (isPublic && token) {
     return NextResponse.redirect(
       new URL(AppRouterUtils.DASHBOARD, request.url)
     );
   }
 
-  // If user is NOT logged in and tries to access protected page, redirect to ROOT
   if (isProtected && !token) {
     return NextResponse.redirect(new URL(AppRouterUtils.ROOT, request.url));
   }
