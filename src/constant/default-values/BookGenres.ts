@@ -1,14 +1,17 @@
+import { BookGenre } from "../enum/BookGenre";
+
 export const bookGenres = [
-  { label: "Fiction", value: "fiction" },
-  { label: "Non-Fiction", value: "non-fiction" },
-  { label: "Mystery", value: "mystery" },
-  { label: "Romance", value: "romance" },
-  { label: "Science Fiction", value: "science-fiction" },
-  { label: "Fantasy", value: "fantasy" },
-  { label: "Biography", value: "biography" },
-  { label: "Self-Help", value: "self-help" },
-  { label: "History", value: "history" },
-  { label: "Horror", value: "horror" },
+  { label: "Fiction", value: BookGenre.FICTION },
+  { label: "Non-Fiction", value: BookGenre.NON_FICTION },
+  { label: "Mystery", value: BookGenre.MYSTERY },
+  { label: "Romance", value: BookGenre.ROMANCE },
+  { label: "Science Fiction", value: BookGenre.SCIENCE_FICTION },
+  { label: "Fantasy", value: BookGenre.FANTASY },
+  { label: "Biography", value: BookGenre.BIOGRAPHY },
+  { label: "Self-Help", value: BookGenre.SELF_HELP },
+  { label: "History", value: BookGenre.HISTORY },
+  { label: "Horror", value: BookGenre.HORROR },
+  { label: "Others", value: BookGenre.OTHERS },
 ];
 
 export const demoData = {
