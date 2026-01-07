@@ -3,13 +3,23 @@ import { connectDB } from "@/config/db";
 import { HttpStatusCode } from "@/constant/enum/HttpStatusCode";
 import { ApiError } from "./ApiError";
 
-// Make it generic over the route params type
-type ApiFunction<Params extends Record<string, string> = {}> = (
+interface ApiResult {
+  status?: number;
+  data?: unknown;
+  message?: string;
+  token?: string;
+}
+
+type ApiFunction<
+  Params extends Record<string, string> = Record<string, string>
+> = (
   req: NextRequest,
   context?: { params?: Params }
-) => Promise<any>;
+) => Promise<ApiResult | unknown>;
 
-export const apiHandler = <Params extends Record<string, string> = {}>(
+export const apiHandler = <
+  Params extends Record<string, string> = Record<string, string>
+>(
   handler: ApiFunction<Params>
 ) => {
   return async (req: NextRequest, context?: { params?: Params }) => {
@@ -18,38 +28,46 @@ export const apiHandler = <Params extends Record<string, string> = {}>(
 
       const result = await handler(req, context);
 
-      const status = result?.status || HttpStatusCode.OK;
+      const resultData = result as ApiResult;
+      const status = resultData?.status || HttpStatusCode.OK;
 
       const response = NextResponse.json(
         {
           status,
-          data: result.data || result,
-          message: result.message,
+          data: resultData.data || resultData,
+          message: resultData.message,
         },
         { status }
       );
 
-      if ("token" in result) {
+      if (
+        resultData &&
+        typeof resultData === "object" &&
+        "token" in resultData
+      ) {
         response.cookies.set({
           name: "auth_token",
-          value: result.token,
+          value: resultData.token as string,
           httpOnly: true,
-          maxAge: result.token === "" ? 0 : undefined,
+          maxAge: resultData.token === "" ? 0 : undefined,
           path: "/",
         });
       }
 
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       const statusCode =
         error instanceof ApiError
           ? error.statusCode
           : HttpStatusCode.INTERNAL_SERVER_ERROR;
 
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+
       return NextResponse.json(
         {
           status: statusCode,
-          error: error.message,
+          error: errorMessage,
         },
         { status: statusCode }
       );
