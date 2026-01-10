@@ -6,14 +6,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { DropdownProps } from "@/types/DropdownProps";
-import { Controller, Control } from "react-hook-form";
+import {
+  Controller,
+  Control,
+  FieldValues,
+  RegisterOptions,
+} from "react-hook-form";
 import { Spinner } from "../ui/spinner";
 import { ChevronDown } from "lucide-react";
 
 interface DropdownWithFormProps extends DropdownProps {
   name: string;
-  control: Control<any>;
-  rules?: {};
+  control: Control<FieldValues>;
+  rules?: RegisterOptions;
   loading?: boolean;
 }
 

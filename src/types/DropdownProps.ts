@@ -1,3 +1,5 @@
+import { Control, FieldValues } from "react-hook-form";
+
 interface OptionType {
   label: string;
   value: string;
@@ -18,4 +20,6 @@ export interface DropdownFieldProps
   error?: string;
   options: OptionType[];
   placeholder: string;
+  control: Control<FieldValues>;
+  name: string;
 }
