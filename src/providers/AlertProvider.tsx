@@ -68,7 +68,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
 
       {/* Toast Container */}
-      <div className="fixed left-1/2 top-4 translate-x-[-50%] z-50 max-w-md w-full pointer-events-none">
+      <div className="fixed left-1/2 top-4 translate-x-[-50%] z-[100] max-w-md w-full pointer-events-none">
         {toast && (
           <div className="pointer-events-auto animate-in slide-in-from-top-5 fade-in duration-300">
             <Alert

@@ -3,7 +3,6 @@
 import { Label } from "@/components/ui/label";
 import { DropdownFieldProps } from "@/types/DropdownProps";
 import Dropdown from "../dropdown/Dropdown";
-import { useForm } from "react-hook-form";
 
 export default function DropdownField({
   label,
@@ -14,11 +13,11 @@ export default function DropdownField({
   error,
   options,
   placeholder,
+  control,
+  name,
 }: DropdownFieldProps) {
   const fieldId = id || label?.toLowerCase().replace(/\s+/g, "-");
-  const { control } = useForm({
-    mode: "onChange",
-  });
+
   return (
     <div className={`w-full space-y-1 ${className}`}>
       {label && (
@@ -28,7 +27,7 @@ export default function DropdownField({
         </Label>
       )}
       <Dropdown
-        name="genre"
+        name={name}
         control={control}
         placeholder={placeholder}
         options={options}

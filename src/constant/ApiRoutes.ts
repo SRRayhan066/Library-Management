@@ -15,3 +15,7 @@ export const signInApi = () => {
 export const signOutApi = () => {
   return Api.POST("api/sign-out");
 };
+
+export const addBookApi = () => {
+  return Api.POST("/api/book");
+};
