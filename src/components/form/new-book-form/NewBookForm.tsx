@@ -7,7 +7,11 @@ import { useAddBook } from "@/hooks/use-add-book";
 import { getBookValidationRules } from "@/validator/client-validate/BookFormValidator";
 import { BookFormField } from "@/constant/form-field/BookFormField";
 
-export default function NewBookForm() {
+interface NewBookFormProps {
+  onSuccess?: () => void;
+}
+
+export default function NewBookForm({ onSuccess }: NewBookFormProps) {
   const {
     register,
     control,
@@ -18,7 +22,7 @@ export default function NewBookForm() {
     isUploading,
     handleUploadStart,
     handleUploadComplete,
-  } = useAddBook();
+  } = useAddBook(onSuccess);
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">

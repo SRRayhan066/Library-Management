@@ -11,7 +11,7 @@ export const POST = apiHandler(async (req: NextRequest) => {
   const result = await BookController.addBook(reqBody);
   return {
     data: result,
-    status: HttpStatusCode.CREATED,
+    status: HttpStatusCode.OK,
     message: MESSAGE.API.BOOK_CREATED,
   };
 });

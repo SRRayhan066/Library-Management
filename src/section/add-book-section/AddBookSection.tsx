@@ -8,10 +8,13 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { IconCirclePlus } from "@tabler/icons-react";
+import { useModal } from "@/hooks/use-modal";
 
 export default function AddBookSection() {
+  const { isModalOpen, onOpenChange, closeModal } = useModal();
+
   return (
-    <Dialog>
+    <Dialog open={isModalOpen} onOpenChange={onOpenChange}>
       <DialogTrigger className="bg-white px-2 py-1 text-black flex items-center gap-1 rounded-md cursor-pointer text-sm">
         <IconCirclePlus /> New Book
       </DialogTrigger>
@@ -22,7 +25,7 @@ export default function AddBookSection() {
             Fill out the details below to add new book to the library.
           </DialogDescription>
         </DialogHeader>
-        <NewBookForm />
+        <NewBookForm onSuccess={closeModal} />
       </DialogContent>
     </Dialog>
   );

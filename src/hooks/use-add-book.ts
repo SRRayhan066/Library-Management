@@ -21,7 +21,7 @@ export interface BookFormValues {
   [BookFormField.COVER_IMAGE]?: string;
 }
 
-export function useAddBook() {
+export function useAddBook(onSuccess?: () => void) {
   const { showSuccessToast, showErrorToast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
 
@@ -56,6 +56,7 @@ export function useAddBook() {
 
     showSuccessToast("Success", "Book added successfully");
     reset();
+    onSuccess?.();
   };
 
   const handleUploadStart = () => {
