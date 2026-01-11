@@ -8,6 +8,7 @@ import { isErrorResponse } from "@/utils/CommonUtils";
 import { useToast } from "@/providers/AlertProvider";
 import { BookGenre } from "@/constant/enum/BookGenre";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export interface BookFormValues {
   [BookFormField.TITLE]: string;
@@ -22,6 +23,7 @@ export interface BookFormValues {
 }
 
 export function useAddBook(onSuccess?: () => void) {
+  const router = useRouter();
   const { showSuccessToast, showErrorToast } = useToast();
   const [isUploading, setIsUploading] = useState(false);
 
@@ -57,6 +59,7 @@ export function useAddBook(onSuccess?: () => void) {
     showSuccessToast("Success", "Book added successfully");
     reset();
     onSuccess?.();
+    router.refresh();
   };
 
   const handleUploadStart = () => {
