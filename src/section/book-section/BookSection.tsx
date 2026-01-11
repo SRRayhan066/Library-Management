@@ -13,6 +13,7 @@ import CardItem from "@/components/card-Item/CardItem";
 import AddBookSection from "../add-book-section/AddBookSection";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "@/providers/AuthProvider";
+import Link from "next/link";
 import { UserType } from "@/constant/enum/UserType";
 
 interface Book {
@@ -66,16 +67,21 @@ export default function BookSection({ books }: BookSectionProps) {
 
       <div className="p-[20px] grid grid-cols-4 gap-5">
         {books.map((book) => (
-          <CardItem
+          <Link
             key={book._id}
-            coverImage={book.coverImage}
-            title={book.title}
-            author={book.author}
-            genre={book.genre}
-            total={book.quantity}
-            available={book.quantity}
-            description={book.description}
-          />
+            href={`/books/${book._id}`}
+            className="block transition-transform hover:scale-[1.02]"
+          >
+            <CardItem
+              coverImage={book.coverImage}
+              title={book.title}
+              author={book.author}
+              genre={book.genre}
+              total={book.quantity}
+              available={book.quantity}
+              description={book.description}
+            />
+          </Link>
         ))}
       </div>
     </section>

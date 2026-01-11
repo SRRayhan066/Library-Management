@@ -79,4 +79,14 @@ export class BookService {
 
     return newBook;
   }
+
+  static async getBookById(id: string) {
+    const book = await Book.findById(id);
+
+    if (!book) {
+      throw new ApiError("Book not found", HttpStatusCode.NOT_FOUND);
+    }
+
+    return book;
+  }
 }
