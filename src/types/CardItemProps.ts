@@ -1,7 +1,10 @@
 export interface CardItemProps {
+  coverImage?: string;
   title?: string;
+  author: string;
   description?: string;
-  message?: string;
+  genre?: string;
   total?: number;
   available?: number;
+  bookDescription?: string;
 }

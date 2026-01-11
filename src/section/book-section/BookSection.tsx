@@ -8,14 +8,31 @@ import {
 } from "@/components/ui/input-group";
 import { IconSearch } from "@tabler/icons-react";
 import Dropdown from "@/components/dropdown/Dropdown";
-import { bookGenres, demoData } from "@/constant/default-values/BookGenres";
+import { bookGenres } from "@/constant/default-values/BookGenres";
 import CardItem from "@/components/card-Item/CardItem";
 import AddBookSection from "../add-book-section/AddBookSection";
 import { useForm } from "react-hook-form";
 import { useAuthUser } from "@/providers/AuthProvider";
 import { UserType } from "@/constant/enum/UserType";
 
-export default function BookSection() {
+interface Book {
+  _id: string;
+  coverImage?: string;
+  title: string;
+  author: string;
+  isbnNo: string;
+  genre: string;
+  publisher?: string;
+  publishedYear?: number;
+  quantity: number;
+  description?: string;
+}
+
+interface BookSectionProps {
+  books: Book[];
+}
+
+export default function BookSection({ books }: BookSectionProps) {
   const { control } = useForm({
     mode: "onChange",
   });
@@ -48,8 +65,17 @@ export default function BookSection() {
       </div>
 
       <div className="p-[20px] grid grid-cols-4 gap-5">
-        {Array.from({ length: 11 }).map((_, index) => (
-          <CardItem key={index} {...demoData} />
+        {books.map((book) => (
+          <CardItem
+            key={book._id}
+            coverImage={book.coverImage}
+            title={book.title}
+            author={book.author}
+            genre={book.genre}
+            total={book.quantity}
+            available={book.quantity}
+            description={book.description}
+          />
         ))}
       </div>
     </section>

@@ -13,17 +13,7 @@ export function isActivePath(currentPath: string, itemPath: string): boolean {
 export const jsonObject = (data: any) => {
   if (!data) return data;
 
-  if (data.toJSON && typeof data.toJSON === "function") {
-    return data.toJSON();
-  }
-
-  if (Array.isArray(data)) {
-    return data.map((item) =>
-      item.toJSON && typeof item.toJSON === "function" ? item.toJSON() : item
-    );
-  }
-
-  return data;
+  return JSON.parse(JSON.stringify(data));
 };
 
 export const isErrorResponse = (response: any) => {
