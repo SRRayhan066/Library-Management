@@ -61,7 +61,7 @@ export class BookService {
     if (existingBook) {
       throw new ApiError(
         "Book with this ISBN already exists",
-        HttpStatusCode.CONFLICT
+        HttpStatusCode.CONFLICT,
       );
     }
 
@@ -88,5 +88,56 @@ export class BookService {
     }
 
     return book;
+  }
+
+  static async updateBook(
+    id: string,
+    data: {
+      coverImage?: string;
+      title?: string;
+      author?: string;
+      isbnNo?: string;
+      genre?: BookGenre;
+      publisher?: string;
+      publishedYear?: number;
+      quantity?: number;
+      description?: string;
+    },
+  ) {
+    const book = await Book.findById(id);
+
+    if (!book) {
+      throw new ApiError("Book not found", HttpStatusCode.NOT_FOUND);
+    }
+
+    // If ISBN is being updated, check for conflicts
+    if (data.isbnNo && data.isbnNo !== book.isbnNo) {
+      const existingBook = await Book.findOne({ isbnNo: data.isbnNo });
+      if (existingBook) {
+        throw new ApiError(
+          "Book with this ISBN already exists",
+          HttpStatusCode.CONFLICT,
+        );
+      }
+    }
+
+    const updatedBook = await Book.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    });
+
+    return updatedBook;
+  }
+
+  static async deleteBook(id: string) {
+    const book = await Book.findById(id);
+
+    if (!book) {
+      throw new ApiError("Book not found", HttpStatusCode.NOT_FOUND);
+    }
+
+    await Book.findByIdAndDelete(id);
+
+    return { id };
   }
 }
