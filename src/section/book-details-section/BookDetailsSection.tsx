@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import { ReactNode } from "react";
 import Link from "next/link";
+import DeleteBookModal from "@/modals/delete-book-modal/DeleteBookModal";
 
 interface Book {
   _id: string;
@@ -46,7 +47,7 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
       )}
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col gap-10">
-        <div className="w-fit">
+        <div className="w-full flex items-center justify-between">
           <Link
             href="/books"
             className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors group"
@@ -56,6 +57,8 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
             </div>
             Back to Library
           </Link>
+
+          <DeleteBookModal bookId={book._id} bookTitle={book.title} />
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-12 items-start">

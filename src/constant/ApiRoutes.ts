@@ -19,3 +19,7 @@ export const signOutApi = () => {
 export const addBookApi = () => {
   return Api.POST("/api/book");
 };
+
+export const deleteBookApi = (id: string) => {
+  return Api.DELETE(`/api/book/${id}`);
+};
