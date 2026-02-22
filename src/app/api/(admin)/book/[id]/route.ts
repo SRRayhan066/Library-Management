@@ -7,7 +7,8 @@ import { MESSAGE } from "@/lib/message";
 
 export const PATCH = apiHandler(
   async (req: NextRequest, context?: { params?: { id: string } }) => {
-    const id = context?.params?.id;
+    const params = await context?.params;
+    const id = params?.id;
     if (!id) {
       throw new Error("Book ID is required");
     }
@@ -24,7 +25,8 @@ export const PATCH = apiHandler(
 
 export const DELETE = apiHandler(
   async (req: NextRequest, context?: { params?: { id: string } }) => {
-    const id = context?.params?.id;
+    const params = await context?.params;
+    const id = params?.id;
     if (!id) {
       throw new Error("Book ID is required");
     }

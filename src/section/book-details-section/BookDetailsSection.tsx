@@ -14,6 +14,7 @@ import Image from "next/image";
 import { ReactNode } from "react";
 import Link from "next/link";
 import DeleteBookModal from "@/modals/delete-book-modal/DeleteBookModal";
+import EditBookModal from "@/modals/edit-book-modal/EditBookModal";
 
 interface Book {
   _id: string;
@@ -58,7 +59,10 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
             Back to Library
           </Link>
 
-          <DeleteBookModal bookId={book._id} bookTitle={book.title} />
+          <div className="flex items-center gap-2">
+            <EditBookModal book={book} />
+            <DeleteBookModal bookId={book._id} bookTitle={book.title} />
+          </div>
         </div>
 
         <div className="w-full flex flex-col lg:flex-row gap-12 items-start">
