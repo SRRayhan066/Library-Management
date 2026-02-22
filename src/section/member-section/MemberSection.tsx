@@ -6,12 +6,37 @@ import {
 } from "@/components/ui/input-group";
 import { IconSearch } from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
-import { TableHeaders, demoData } from "@/constant/default-values/MemberTable";
+import { TableHeaders } from "@/constant/default-values/MemberTable";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { AppRouterUtils } from "@/utils/AppRouterUtils";
 
-export default function MemberSection() {
+interface IStudentReference {
+  studentId: string;
+  name: string;
+  department: string;
+  batch: number;
+}
+
+interface IMemberItem {
+  referenceId: IStudentReference | null;
+}
+
+interface MemberProps {
+  members: IMemberItem[];
+}
+
+export default function MemberSection({ members }: MemberProps) {
+  const tableData = members.map((member) => ({
+    registrationNo: member.referenceId?.studentId || "N/A",
+    name: member.referenceId?.name || "N/A",
+    department: member.referenceId?.department || "N/A",
+    session: member.referenceId?.batch?.toString() || "N/A",
+    totalBorrowed: 0,
+    totalReturned: 0,
+    charges: 0,
+  }));
+
   return (
     <section className="h-full">
       <div className="sticky top-[48px] bg-[var(--background)] ">
@@ -32,7 +57,7 @@ export default function MemberSection() {
       <div className="p-4">
         <DataTable
           headers={TableHeaders}
-          data={demoData}
+          data={tableData}
           actionLabel="View Details"
           renderAction={(row) => (
             <Button asChild>

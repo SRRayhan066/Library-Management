@@ -34,12 +34,11 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
     },
-  }
+  },
 );
 
 export interface ButtonProps
-  extends React.ComponentProps<"button">,
-    VariantProps<typeof buttonVariants> {
+  extends React.ComponentProps<"button">, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   loading?: boolean;
 }
@@ -63,8 +62,14 @@ function Button({
       disabled={disabled || loading}
       {...props}
     >
-      {loading && <IconLoader2 className="animate-spin" />}
-      {children}
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {loading && <IconLoader2 className="animate-spin" />}
+          {children}
+        </>
+      )}
     </Comp>
   );
 }
