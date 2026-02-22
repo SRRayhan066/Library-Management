@@ -11,10 +11,11 @@ import Dropdown from "@/components/dropdown/Dropdown";
 import { bookGenres } from "@/constant/default-values/BookGenres";
 import CardItem from "@/components/card-Item/CardItem";
 import AddBookSection from "../add-book-section/AddBookSection";
-import { useForm } from "react-hook-form";
+import { useForm, Control, FieldValues } from "react-hook-form";
 import { useAuthUser } from "@/providers/AuthProvider";
 import Link from "next/link";
 import { UserType } from "@/constant/enum/UserType";
+import { useMemo, useState } from "react";
 
 interface Book {
   _id: string;
@@ -34,10 +35,33 @@ interface BookSectionProps {
 }
 
 export default function BookSection({ books }: BookSectionProps) {
-  const { control } = useForm({
+  const { control, watch } = useForm({
     mode: "onChange",
+    defaultValues: {
+      genre: "all",
+    },
   });
   const { user } = useAuthUser();
+  const [searchQuery, setSearchQuery] = useState("");
+  const selectedGenre = watch("genre");
+
+  const genreOptions = useMemo(() => {
+    return [{ label: "All Genres", value: "all" }, ...bookGenres];
+  }, []);
+
+  const filteredBooks = useMemo(() => {
+    return books.filter((book) => {
+      const matchesSearch = book.title
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      const matchesGenre =
+        !selectedGenre ||
+        selectedGenre === "all" ||
+        book.genre === selectedGenre;
+      return matchesSearch && matchesGenre;
+    });
+  }, [books, searchQuery, selectedGenre]);
+
   return (
     <section className="h-full">
       <div className="sticky top-[48px] bg-[var(--background)] ">
@@ -45,7 +69,11 @@ export default function BookSection({ books }: BookSectionProps) {
           <h3 className="font-semibold text-2xl">Book List</h3>
           <div className="flex justify-end items-center gap-2 w-1/2 ">
             <InputGroup className="w-1/2 ">
-              <InputGroupInput placeholder="Search..." />
+              <InputGroupInput
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
               <InputGroupAddon>
                 <IconSearch />
               </InputGroupAddon>
@@ -54,9 +82,9 @@ export default function BookSection({ books }: BookSectionProps) {
             <div className="w-1/4">
               <Dropdown
                 name="genre"
-                control={control}
+                control={control as unknown as Control<FieldValues>}
                 placeholder="Select Genre"
-                options={bookGenres}
+                options={genreOptions}
               />
             </div>
             {user?.userType === UserType.ADMIN && <AddBookSection />}
@@ -66,7 +94,7 @@ export default function BookSection({ books }: BookSectionProps) {
       </div>
 
       <div className="p-[20px] grid grid-cols-4 gap-5">
-        {books.map((book) => (
+        {filteredBooks.map((book) => (
           <Link
             key={book._id}
             href={`/books/${book._id}`}
