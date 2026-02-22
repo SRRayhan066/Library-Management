@@ -35,4 +35,25 @@ export class BookController {
       description,
     });
   }
+
+  static async updateBook(
+    id: string,
+    data: {
+      coverImage?: string;
+      title?: string;
+      author?: string;
+      isbnNo?: string;
+      genre?: BookGenre;
+      publisher?: string;
+      publishedYear?: number;
+      quantity?: number;
+      description?: string;
+    },
+  ) {
+    return BookService.updateBook(id, data);
+  }
+
+  static async deleteBook(id: string) {
+    return BookService.deleteBook(id);
+  }
 }
