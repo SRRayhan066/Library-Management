@@ -15,6 +15,10 @@ import { ReactNode } from "react";
 import Link from "next/link";
 import DeleteBookModal from "@/modals/delete-book-modal/DeleteBookModal";
 import EditBookModal from "@/modals/edit-book-modal/EditBookModal";
+import { useAuthUser } from "@/providers/AuthProvider";
+import { UserType } from "@/constant/enum/UserType";
+import { Button } from "@/components/ui/button";
+import { IconClipboardCheck } from "@tabler/icons-react";
 
 interface Book {
   _id: string;
@@ -34,6 +38,9 @@ interface BookDetailsSectionProps {
 }
 
 export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
+  const { user } = useAuthUser();
+  const isStudent = user?.userType === UserType.STUDENT;
+
   return (
     <div className="relative min-h-screen w-full bg-background overflow-hidden p-6 md:p-10">
       {book.coverImage && (
@@ -60,8 +67,22 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
           </Link>
 
           <div className="flex items-center gap-2">
-            <EditBookModal book={book} />
-            <DeleteBookModal bookId={book._id} bookTitle={book.title} />
+            {!isStudent && (
+              <>
+                <EditBookModal book={book} />
+                <DeleteBookModal bookId={book._id} bookTitle={book.title} />
+              </>
+            )}
+            {isStudent && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-bold uppercase tracking-widest text-[10px] cursor-pointer"
+              >
+                <IconClipboardCheck size={16} />
+                Apply for the Book
+              </Button>
+            )}
           </div>
         </div>
 
