@@ -1,5 +1,3 @@
-import { HttpStatusCode } from "@/constant/enum/HttpStatusCode";
-
 export const isEmptyArray = (arr: unknown): boolean => {
   return Array.isArray(arr) && arr.length === 0;
 };
@@ -17,5 +15,6 @@ export const jsonObject = (data: any) => {
 };
 
 export const isErrorResponse = (response: any) => {
-  return response?.status !== HttpStatusCode.OK;
+  const status = response?.status;
+  return status < 200 || status >= 300;
 };

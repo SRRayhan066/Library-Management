@@ -25,20 +25,6 @@ export class ApplicationService {
       throw new ApiError("Book not found", HttpStatusCode.NOT_FOUND);
     }
 
-    // Check if there's already a pending or approved application for this book by this user
-    const existingApplication = await Application.findOne({
-      bookId,
-      userId,
-      status: { $in: [ApplicationStatus.PENDING, ApplicationStatus.APPROVED] },
-    });
-
-    if (existingApplication) {
-      throw new ApiError(
-        "You already have a pending or approved application for this book",
-        HttpStatusCode.CONFLICT,
-      );
-    }
-
     const newApplication = await Application.create({
       bookId,
       userId,
