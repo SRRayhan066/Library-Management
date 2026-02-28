@@ -15,10 +15,9 @@ import { ReactNode } from "react";
 import Link from "next/link";
 import DeleteBookModal from "@/modals/delete-book-modal/DeleteBookModal";
 import EditBookModal from "@/modals/edit-book-modal/EditBookModal";
+import ApplyBookModal from "@/modals/apply-book-modal/ApplyBookModal";
 import { useAuthUser } from "@/providers/AuthProvider";
 import { UserType } from "@/constant/enum/UserType";
-import { Button } from "@/components/ui/button";
-import { IconClipboardCheck } from "@tabler/icons-react";
 
 interface Book {
   _id: string;
@@ -69,20 +68,11 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
           <div className="flex items-center gap-2">
             {!isStudent && (
               <>
-                <EditBookModal book={book} />
+                {book.quantity > 0 && <EditBookModal book={book} />}
                 <DeleteBookModal bookId={book._id} bookTitle={book.title} />
               </>
             )}
-            {isStudent && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="font-bold uppercase tracking-widest text-[10px] cursor-pointer"
-              >
-                <IconClipboardCheck size={16} />
-                Apply for the Book
-              </Button>
-            )}
+            {isStudent && book.quantity > 0 && <ApplyBookModal book={book} />}
           </div>
         </div>
 
