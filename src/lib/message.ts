@@ -5,6 +5,9 @@ export const MESSAGE = {
     BOOK_CREATED: "Book created successfully",
     BOOK_UPDATED: "Book updated successfully",
     BOOK_DELETED: "Book deleted successfully",
+    APPLICATION_CREATED: "Application created successfully",
+    APPLICATION_UPDATED: "Application status updated successfully",
+    GET_APPLICATIONS: "Applications fetched successfully",
     ERROR: {
       USER_CREATION_FAILED: "User creation failed",
       STUDENT_NOT_FOUND: "Student not found",
@@ -12,6 +15,9 @@ export const MESSAGE = {
       ACCOUNT_NOT_FOUND: "Account doesn't exist",
       WRONG_PASSWORD: "Wrong Password",
       BOOK_NOT_FOUND: "Book not found",
+      APPLICATION_NOT_FOUND: "Application not found",
+      ALREADY_APPLIED:
+        "You already have a pending or approved application for this book",
     },
   },
 };
