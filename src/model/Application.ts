@@ -6,6 +6,9 @@ export interface IApplication extends Document {
   userId: mongoose.Types.ObjectId;
   status: ApplicationStatus;
   appliedDate: Date;
+  fromDate: Date;
+  toDate: Date;
+  quantity: number;
   updatedBy?: mongoose.Types.ObjectId;
 }
 
@@ -32,6 +35,19 @@ const ApplicationSchema = new Schema<IApplication>(
     appliedDate: {
       type: Date,
       default: Date.now,
+    },
+    fromDate: {
+      type: Date,
+      required: [true, "From date is required"],
+    },
+    toDate: {
+      type: Date,
+      required: [true, "To date is required"],
+    },
+    quantity: {
+      type: Number,
+      required: [true, "Quantity is required"],
+      min: [1, "Quantity must be at least 1"],
     },
     updatedBy: {
       type: Schema.Types.ObjectId,

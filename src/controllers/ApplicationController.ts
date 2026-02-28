@@ -5,18 +5,21 @@ import { MESSAGE } from "@/lib/message";
 
 export class ApplicationController {
   static async createApplication(req: NextRequest) {
-    const { bookId, userId } = await req.json();
+    const { bookId, userId, fromDate, toDate, quantity } = await req.json();
 
-    if (!bookId || !userId) {
+    if (!bookId || !userId || !fromDate || !toDate || !quantity) {
       return {
         status: HttpStatusCode.BAD_REQUEST,
-        message: "Book ID and User ID are required",
+        message: "Missing required fields",
       };
     }
 
     const application = await ApplicationService.createApplication({
       bookId,
       userId,
+      fromDate,
+      toDate,
+      quantity,
     });
 
     return {

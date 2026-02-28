@@ -9,9 +9,15 @@ export class ApplicationService {
   static async createApplication({
     bookId,
     userId,
+    fromDate,
+    toDate,
+    quantity,
   }: {
     bookId: string;
     userId: string;
+    fromDate: string;
+    toDate: string;
+    quantity: number;
   }) {
     // Check if book exists
     const book = await Book.findById(bookId);
@@ -38,6 +44,9 @@ export class ApplicationService {
       userId,
       status: ApplicationStatus.PENDING,
       appliedDate: new Date(),
+      fromDate: new Date(fromDate),
+      toDate: new Date(toDate),
+      quantity,
     });
 
     return newApplication;
