@@ -29,6 +29,11 @@ const basePrimaryItems = [
     url: "/books",
     icon: IconBookFilled,
   },
+  {
+    title: "Applications",
+    url: "/applications",
+    icon: IconFilesFilled,
+  },
 ];
 
 const adminPrimaryItems = [
@@ -36,11 +41,6 @@ const adminPrimaryItems = [
     title: "Members",
     url: "/members",
     icon: IconUsersGroup,
-  },
-  {
-    title: "Applications",
-    url: "/applications",
-    icon: IconFilesFilled,
   },
   {
     title: "Fine Rules",

@@ -41,6 +41,12 @@ export class ApplicationService {
   static async getApplicationsByUser(userId: string) {
     const applications = await Application.find({ userId })
       .populate("bookId")
+      .populate({
+        path: "userId",
+        populate: {
+          path: "referenceId",
+        },
+      })
       .sort({ createdAt: -1 });
     return applications;
   }
@@ -48,7 +54,12 @@ export class ApplicationService {
   static async getAllApplications() {
     const applications = await Application.find()
       .populate("bookId")
-      .populate("userId")
+      .populate({
+        path: "userId",
+        populate: {
+          path: "referenceId",
+        },
+      })
       .sort({ createdAt: -1 });
     return applications;
   }
