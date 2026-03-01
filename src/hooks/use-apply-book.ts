@@ -2,7 +2,10 @@
 
 import { useForm } from "react-hook-form";
 import { ApiClient } from "@/wrapper/ApiClient";
-import { createApplicationApi } from "@/constant/ApiRoutes";
+import {
+  createApplicationApi,
+  updateApplicationApi,
+} from "@/constant/ApiRoutes";
 import { isErrorResponse } from "@/utils/CommonUtils";
 import { useToast } from "@/providers/AlertProvider";
 import { useRouter } from "next/navigation";
@@ -18,6 +21,9 @@ export function useApplyBook(
   bookId: string,
   availableQuantity: number,
   onSuccess?: () => void,
+  defaultValues?: Partial<ApplyBookFormValues>,
+  mode: "apply" | "edit" = "apply",
+  applicationId?: string,
 ) {
   const router = useRouter();
   const { user } = useAuthUser();
@@ -34,17 +40,17 @@ export function useApplyBook(
   } = useForm<ApplyBookFormValues>({
     mode: "onChange",
     defaultValues: {
-      dateRange: {
+      dateRange: defaultValues?.dateRange || {
         from: new Date(),
         to: undefined,
       },
-      quantity: 1,
+      quantity: defaultValues?.quantity || 1,
     },
   });
 
   const onSubmit = async (data: ApplyBookFormValues) => {
     if (!user) {
-      showErrorToast("Error", "You must be logged in to apply for a book");
+      showErrorToast("Error", "You must be logged in to process this request");
       return;
     }
 
@@ -61,17 +67,25 @@ export function useApplyBook(
       quantity: data.quantity,
     };
 
-    const response = await ApiClient(createApplicationApi, payload);
+    const apiRoute =
+      mode === "edit" && applicationId
+        ? () => updateApplicationApi(applicationId)
+        : createApplicationApi;
+
+    const response = await ApiClient(apiRoute, payload);
 
     if (isErrorResponse(response)) {
       showErrorToast(
         "Error",
-        response?.error || "Failed to submit application",
+        response?.error || `Failed to ${mode} application`,
       );
       return;
     }
 
-    showSuccessToast("Success", "Application submitted successfully");
+    showSuccessToast(
+      "Success",
+      `Application ${mode === "edit" ? "updated" : "submitted"} successfully`,
+    );
     reset();
     onSuccess?.();
     router.refresh();

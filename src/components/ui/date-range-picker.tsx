@@ -7,7 +7,7 @@ import { DateRange } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar, CalendarProps } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
@@ -17,12 +17,14 @@ import {
 interface DateRangePickerProps extends React.HTMLAttributes<HTMLDivElement> {
   date: DateRange | undefined;
   setDate: (date: DateRange | undefined) => void;
+  disabled?: CalendarProps["disabled"];
 }
 
 export function DateRangePicker({
   className,
   date,
   setDate,
+  disabled,
 }: DateRangePickerProps) {
   return (
     <div className={cn("grid gap-2", className)}>
@@ -55,11 +57,15 @@ export function DateRangePicker({
           <Calendar
             initialFocus
             mode="range"
-            defaultMonth={date?.from}
+            defaultMonth={
+              date?.from && date.from >= startOfToday()
+                ? date.from
+                : startOfToday()
+            }
             selected={date}
             onSelect={setDate}
             numberOfMonths={2}
-            disabled={{ before: startOfToday() }}
+            disabled={disabled ?? { before: startOfToday() }}
           />
         </PopoverContent>
       </Popover>

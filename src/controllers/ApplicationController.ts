@@ -87,4 +87,54 @@ export class ApplicationController {
       message: MESSAGE.API.APPLICATION_UPDATED,
     };
   }
+
+  static async deleteApplication(
+    req: NextRequest,
+    context: { params?: { id: string } },
+  ) {
+    const { id } = (await context.params) as { id: string };
+
+    if (!id) {
+      return {
+        status: HttpStatusCode.BAD_REQUEST,
+        message: "Application ID is required",
+      };
+    }
+
+    const result = await ApplicationService.deleteApplication(id);
+
+    return {
+      status: HttpStatusCode.OK,
+      data: result,
+      message: "Application cancelled successfully",
+    };
+  }
+
+  static async updateApplication(
+    req: NextRequest,
+    context: { params?: { id: string } },
+  ) {
+    const { id } = (await context.params) as { id: string };
+    const { quantity, fromDate, toDate } = await req.json();
+
+    if (!id || !quantity || !fromDate || !toDate) {
+      return {
+        status: HttpStatusCode.BAD_REQUEST,
+        message: "Missing required fields",
+      };
+    }
+
+    const result = await ApplicationService.updateApplication({
+      applicationId: id,
+      quantity,
+      fromDate,
+      toDate,
+    });
+
+    return {
+      status: HttpStatusCode.OK,
+      data: result,
+      message: "Application updated successfully",
+    };
+  }
 }

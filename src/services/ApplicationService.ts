@@ -84,4 +84,52 @@ export class ApplicationService {
 
     return application;
   }
+
+  static async deleteApplication(applicationId: string) {
+    const application = await Application.findById(applicationId);
+    if (!application) {
+      throw new ApiError("Application not found", HttpStatusCode.NOT_FOUND);
+    }
+
+    if (application.status !== ApplicationStatus.PENDING) {
+      throw new ApiError(
+        "Only pending applications can be cancelled",
+        HttpStatusCode.BAD_REQUEST,
+      );
+    }
+
+    await application.deleteOne();
+    return { message: "Application cancelled successfully" };
+  }
+
+  static async updateApplication({
+    applicationId,
+    quantity,
+    fromDate,
+    toDate,
+  }: {
+    applicationId: string;
+    quantity: number;
+    fromDate: string;
+    toDate: string;
+  }) {
+    const application = await Application.findById(applicationId);
+    if (!application) {
+      throw new ApiError("Application not found", HttpStatusCode.NOT_FOUND);
+    }
+
+    if (application.status !== ApplicationStatus.PENDING) {
+      throw new ApiError(
+        "Only pending applications can be updated",
+        HttpStatusCode.BAD_REQUEST,
+      );
+    }
+
+    application.quantity = quantity;
+    application.fromDate = new Date(fromDate);
+    application.toDate = new Date(toDate);
+
+    await application.save();
+    return application;
+  }
 }

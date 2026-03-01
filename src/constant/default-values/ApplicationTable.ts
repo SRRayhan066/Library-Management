@@ -21,6 +21,10 @@ export const TableHeaders = [
     label: "Application Date",
     value: "applicationDate",
   },
+  {
+    label: "Status",
+    value: "status",
+  },
 ];
 
 export const demoData = [

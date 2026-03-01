@@ -1,6 +1,4 @@
-"use client";
-
-import { useApplyBook } from "@/hooks/use-apply-book";
+import { ApplyBookFormValues, useApplyBook } from "@/hooks/use-apply-book";
 import { Button } from "@/components/ui/button";
 import InputField from "@/components/input-field/InputField";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
@@ -11,6 +9,9 @@ interface ApplyBookFormProps {
   bookTitle: string;
   availableQuantity: number;
   onSuccess?: () => void;
+  defaultValues?: Partial<ApplyBookFormValues>;
+  mode?: "apply" | "edit";
+  applicationId?: string;
 }
 
 export default function ApplyBookForm({
@@ -18,9 +19,19 @@ export default function ApplyBookForm({
   bookTitle,
   availableQuantity,
   onSuccess,
+  defaultValues,
+  mode = "apply",
+  applicationId,
 }: ApplyBookFormProps) {
   const { register, handleSubmit, errors, isSubmitting, isValid, control } =
-    useApplyBook(bookId, availableQuantity, onSuccess);
+    useApplyBook(
+      bookId,
+      availableQuantity,
+      onSuccess,
+      defaultValues,
+      mode,
+      applicationId,
+    );
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">

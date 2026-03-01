@@ -31,3 +31,11 @@ export const updateBookApi = (id: string) => {
 export const createApplicationApi = () => {
   return Api.POST("/api/student/application");
 };
+
+export const deleteApplicationApi = (id: string) => {
+  return Api.DELETE(`/api/student/application/${id}`);
+};
+
+export const updateApplicationApi = (id: string) => {
+  return Api.PATCH(`/api/student/application/${id}`);
+};
