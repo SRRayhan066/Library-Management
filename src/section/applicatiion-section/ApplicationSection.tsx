@@ -21,6 +21,8 @@ import DeleteApplicationModal from "@/modals/delete-application-modal/DeleteAppl
 import EditApplicationModal from "@/modals/edit-application-modal/EditApplicationModal";
 import { useDeleteApplication } from "@/hooks/use-delete-application";
 import { Button } from "@/components/ui/button";
+import { useUpdateApplicationStatus } from "@/hooks/use-update-application-status";
+import { ApplicationStatus } from "@/constant/enum/ApplicationStatus";
 
 interface ApplicationSectionProps {
   applications: any[];
@@ -41,6 +43,20 @@ export default function ApplicationSection({
     setIsDeleteModalOpen(false);
     setSelectedAppId(null);
   });
+
+  const [loadingId, setLoadingId] = useState<string | null>(null);
+  const { updateStatus } = useUpdateApplicationStatus(() => {
+    setLoadingId(null);
+  });
+
+  const handleStatusChange = async (id: string, status: ApplicationStatus) => {
+    if (!user?.userId) return;
+    setLoadingId(id);
+    const success = await updateStatus(id, status, user.userId);
+    if (!success) {
+      setLoadingId(null);
+    }
+  };
 
   const { control } = useForm({
     mode: "onChange",
@@ -66,6 +82,10 @@ export default function ApplicationSection({
             defaultValue={app.status}
             placeholder="Status"
             options={ApplicationStatusOptions}
+            onValueChange={(value) =>
+              handleStatusChange(app._id, value as ApplicationStatus)
+            }
+            loading={loadingId === app._id}
           />
         ) : (
           <Badge

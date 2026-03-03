@@ -39,3 +39,7 @@ export const deleteApplicationApi = (id: string) => {
 export const updateApplicationApi = (id: string) => {
   return Api.PATCH(`/api/student/application/${id}`);
 };
+
+export const updateApplicationStatusApi = (id: string) => {
+  return Api.PATCH(`/api/application/${id}`);
+};

@@ -78,6 +78,26 @@ export class ApplicationService {
       throw new ApiError("Application not found", HttpStatusCode.NOT_FOUND);
     }
 
+    if (status === ApplicationStatus.APPROVED) {
+      const book = await Book.findById(application.bookId);
+      if (!book) {
+        throw new ApiError(
+          "Associated book not found",
+          HttpStatusCode.NOT_FOUND,
+        );
+      }
+
+      if (book.quantity < application.quantity) {
+        throw new ApiError(
+          `Insufficient book quantity. Available: ${book.quantity}, Requested: ${application.quantity}`,
+          HttpStatusCode.BAD_REQUEST,
+        );
+      }
+
+      book.quantity -= application.quantity;
+      await book.save();
+    }
+
     application.status = status;
     application.updatedBy = adminId as unknown as mongoose.Types.ObjectId;
     await application.save();
