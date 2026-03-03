@@ -17,6 +17,7 @@ interface EditApplicationModalProps {
       _id: string;
       title: string;
       quantity: number;
+      totalAvailable: number;
     };
     quantity: number;
     fromDate: string;
@@ -46,7 +47,9 @@ export default function EditApplicationModal({
         <ApplyBookForm
           bookId={application.bookId._id}
           bookTitle={application.bookId.title}
-          availableQuantity={application.bookId.quantity}
+          availableQuantity={
+            application.bookId.totalAvailable ?? application.bookId.quantity
+          }
           defaultValues={{
             dateRange: {
               from: new Date(application.fromDate),

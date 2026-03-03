@@ -7,7 +7,7 @@ export const TableHeaders = [
   },
   {
     label: "Book Id",
-    value: "bookId",
+    value: "bookIdDisplay",
   },
   {
     label: "Book Name",

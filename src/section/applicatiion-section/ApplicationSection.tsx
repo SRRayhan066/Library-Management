@@ -66,7 +66,7 @@ export default function ApplicationSection({
     ...app,
     registrationNo:
       app.userId?.referenceId?.studentId || app.userId?.userId || "N/A",
-    bookId: app.bookId?._id
+    bookIdDisplay: app.bookId?._id
       ? `${app.bookId._id.slice(0, 8)}...${app.bookId._id.slice(-4)}`
       : "N/A",
     bookName: app.bookId?.title || "N/A",
@@ -133,32 +133,30 @@ export default function ApplicationSection({
             !isAdmin
               ? (row) => (
                   <div className="flex items-center gap-2 justify-end">
-                    {row.rawStatus === "PENDING" && (
-                      <>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 h-8 w-8 cursor-pointer"
-                          onClick={() => {
-                            setSelectedApp(row);
-                            setIsEditModalOpen(true);
-                          }}
-                        >
-                          <IconPencil size={18} />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-red-500 hover:text-red-600 hover:bg-red-500/10 h-8 w-8 cursor-pointer"
-                          onClick={() => {
-                            setSelectedAppId(row._id);
-                            setIsDeleteModalOpen(true);
-                          }}
-                        >
-                          <IconTrash size={18} />
-                        </Button>
-                      </>
-                    )}
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 h-8 w-8 cursor-pointer"
+                      disabled={row.rawStatus !== "PENDING"}
+                      onClick={() => {
+                        setSelectedApp(row);
+                        setIsEditModalOpen(true);
+                      }}
+                    >
+                      <IconPencil size={18} />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-red-500 hover:text-red-600 hover:bg-red-500/10 h-8 w-8 cursor-pointer"
+                      disabled={row.rawStatus !== "PENDING"}
+                      onClick={() => {
+                        setSelectedAppId(row._id);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    >
+                      <IconTrash size={18} />
+                    </Button>
                   </div>
                 )
               : undefined
