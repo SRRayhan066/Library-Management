@@ -14,6 +14,10 @@ export const TableHeaders = [
     value: "bookName",
   },
   {
+    label: "Quantity",
+    value: "quantity",
+  },
+  {
     label: "Applicant",
     value: "applicant",
   },

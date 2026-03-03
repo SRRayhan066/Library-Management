@@ -50,7 +50,9 @@ export default function ApplicationSection({
     ...app,
     registrationNo:
       app.userId?.referenceId?.studentId || app.userId?.userId || "N/A",
-    bookId: app.bookId?._id || "N/A",
+    bookId: app.bookId?._id
+      ? `${app.bookId._id.slice(0, 8)}...${app.bookId._id.slice(-4)}`
+      : "N/A",
     bookName: app.bookId?.title || "N/A",
     applicant: app.userId?.referenceId?.name || app.userId?.name || "N/A",
     applicationDate: format(new Date(app.appliedDate), "PPP"),
@@ -82,10 +84,8 @@ export default function ApplicationSection({
     ),
   }));
 
-  const studentHeaders = TableHeaders.map((header) =>
-    header.value === "applicant"
-      ? { label: "Quantity", value: "quantity" }
-      : header,
+  const studentHeaders = TableHeaders.filter(
+    (header) => header.value !== "applicant",
   );
 
   return (
@@ -109,37 +109,39 @@ export default function ApplicationSection({
           headers={isAdmin ? TableHeaders : studentHeaders}
           data={tableData}
           actionLabel={!isAdmin ? "Action" : undefined}
-          renderAction={(row) =>
-            !isAdmin && (
-              <div className="flex items-center gap-2 justify-end">
-                {row.rawStatus === "PENDING" && (
-                  <>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 h-8 w-8 cursor-pointer"
-                      onClick={() => {
-                        setSelectedApp(row);
-                        setIsEditModalOpen(true);
-                      }}
-                    >
-                      <IconPencil size={18} />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-500 hover:text-red-600 hover:bg-red-500/10 h-8 w-8 cursor-pointer"
-                      onClick={() => {
-                        setSelectedAppId(row._id);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    >
-                      <IconTrash size={18} />
-                    </Button>
-                  </>
-                )}
-              </div>
-            )
+          renderAction={
+            !isAdmin
+              ? (row) => (
+                  <div className="flex items-center gap-2 justify-end">
+                    {row.rawStatus === "PENDING" && (
+                      <>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 h-8 w-8 cursor-pointer"
+                          onClick={() => {
+                            setSelectedApp(row);
+                            setIsEditModalOpen(true);
+                          }}
+                        >
+                          <IconPencil size={18} />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-600 hover:bg-red-500/10 h-8 w-8 cursor-pointer"
+                          onClick={() => {
+                            setSelectedAppId(row._id);
+                            setIsDeleteModalOpen(true);
+                          }}
+                        >
+                          <IconTrash size={18} />
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                )
+              : undefined
           }
         />
       </div>
