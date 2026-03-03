@@ -18,6 +18,7 @@ import EditBookModal from "@/modals/edit-book-modal/EditBookModal";
 import ApplyBookModal from "@/modals/apply-book-modal/ApplyBookModal";
 import { useAuthUser } from "@/providers/AuthProvider";
 import { UserType } from "@/constant/enum/UserType";
+import { getGenreLabel } from "@/utils/BookUtils";
 
 interface Book {
   _id: string;
@@ -29,6 +30,7 @@ interface Book {
   publisher?: string;
   publishedYear?: number;
   quantity: number;
+  totalAvailable: number;
   description?: string;
 }
 
@@ -106,7 +108,9 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
                   variant="default"
                   className="font-bold uppercase tracking-[0.1em] text-[10px] h-6 rounded-full px-4 shadow-sm flex items-center justify-center"
                 >
-                  <span className="leading-none">{book.genre}</span>
+                  <span className="leading-none">
+                    {getGenreLabel(book.genre)}
+                  </span>
                 </Badge>
                 <span className="text-xs font-semibold text-muted-foreground/60 uppercase tracking-widest">
                   Archive ID: {book._id.slice(-6)}
@@ -131,7 +135,7 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
               <DetailBox
                 icon={<IconPackage />}
                 label="Stock"
-                value={`${book.quantity} UNITS`}
+                value={`${book.totalAvailable ?? book.quantity} / ${book.quantity} AVAILABLE`}
               />
               <DetailBox
                 icon={<IconBuildingCommunity />}

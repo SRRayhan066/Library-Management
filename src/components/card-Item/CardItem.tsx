@@ -13,8 +13,8 @@ export default function CardItem({
   available,
 }: CardItemProps) {
   return (
-    <Card className="gap-0 overflow-hidden">
-      <CardHeader className="">
+    <Card className="gap-0 overflow-hidden h-full flex flex-col">
+      <CardHeader className="h-[120px] p-4">
         <div className="flex gap-4 items-start">
           {coverImage && (
             <div className="relative w-24 h-24 flex-shrink-0 overflow-hidden rounded-md">
@@ -38,7 +38,7 @@ export default function CardItem({
         </div>
       </CardHeader>
 
-      <CardFooter className="flex flex-col items-start gap-3 pt-3">
+      <CardFooter className="flex flex-col items-start gap-3 pt-3 flex-1">
         <div className="flex flex-wrap gap-2">
           {genre && <Badge variant="outline">{genre}</Badge>}
           {total !== undefined && (

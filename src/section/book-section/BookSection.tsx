@@ -16,6 +16,7 @@ import { useAuthUser } from "@/providers/AuthProvider";
 import Link from "next/link";
 import { UserType } from "@/constant/enum/UserType";
 import { useMemo, useState } from "react";
+import { getGenreLabel } from "@/utils/BookUtils";
 
 interface Book {
   _id: string;
@@ -27,6 +28,7 @@ interface Book {
   publisher?: string;
   publishedYear?: number;
   quantity: number;
+  totalAvailable: number;
   description?: string;
 }
 
@@ -98,15 +100,15 @@ export default function BookSection({ books }: BookSectionProps) {
           <Link
             key={book._id}
             href={`/books/${book._id}`}
-            className="block transition-transform hover:scale-[1.02]"
+            className="block transition-transform hover:scale-[1.02] h-full"
           >
             <CardItem
               coverImage={book.coverImage}
               title={book.title}
               author={book.author}
-              genre={book.genre}
+              genre={getGenreLabel(book.genre)}
               total={book.quantity}
-              available={book.quantity}
+              available={book.totalAvailable ?? book.quantity}
               description={book.description}
             />
           </Link>

@@ -87,14 +87,14 @@ export class ApplicationService {
         );
       }
 
-      if (book.quantity < application.quantity) {
+      if (book.totalAvailable < application.quantity) {
         throw new ApiError(
-          `Insufficient book quantity. Available: ${book.quantity}, Requested: ${application.quantity}`,
+          `Insufficient book quantity. Available: ${book.totalAvailable}, Requested: ${application.quantity}`,
           HttpStatusCode.BAD_REQUEST,
         );
       }
 
-      book.quantity -= application.quantity;
+      book.totalAvailable -= application.quantity;
       await book.save();
     }
 

@@ -74,6 +74,7 @@ export class BookService {
       publisher,
       publishedYear,
       quantity,
+      totalAvailable: quantity,
       description,
     });
 
@@ -119,6 +120,11 @@ export class BookService {
           HttpStatusCode.CONFLICT,
         );
       }
+    }
+
+    if (data.quantity !== undefined && data.quantity !== book.quantity) {
+      const diff = data.quantity - book.quantity;
+      (data as any).totalAvailable = Math.max(0, book.totalAvailable + diff);
     }
 
     const updatedBook = await Book.findByIdAndUpdate(id, data, {

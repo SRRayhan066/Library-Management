@@ -17,6 +17,7 @@ interface ApplyBookModalProps {
     _id: string;
     title: string;
     quantity: number;
+    totalAvailable: number;
   };
 }
 
@@ -48,7 +49,7 @@ export default function ApplyBookModal({ book }: ApplyBookModalProps) {
         <ApplyBookForm
           bookId={book._id}
           bookTitle={book.title}
-          availableQuantity={book.quantity}
+          availableQuantity={book.totalAvailable ?? book.quantity}
           onSuccess={() => setOpen(false)}
         />
       </DialogContent>
