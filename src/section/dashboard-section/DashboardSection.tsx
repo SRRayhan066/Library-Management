@@ -1,4 +1,4 @@
-import CardItem from "@/components/card-Item/CardItem";
+import SummaryCard from "@/components/summary-card/SummaryCard";
 import ChartArea from "@/components/chart-area/ChartArea";
 import DataTable from "@/components/DataTable/DataTable";
 import {
@@ -20,28 +20,38 @@ export default function DashboardSection() {
 }
 
 const CardSection = () => (
-  <div className="flex justify-center gap-5">
-    <CardItem
-      title="2000"
-      description="Total Books"
-      message="Collection expanding steadily with new acquisitions added regularly to serve our growing community of readers"
-      available={1200}
+  <div className="flex justify-center gap-5 overflow-x-auto pb-2">
+    <SummaryCard
+      label="Total Revenue"
+      value="$1,250.00"
+      change="+12.5%"
+      trend="up"
+      description="Trending up this month"
+      footer="Visitors for the last 6 months"
     />
-    <CardItem
-      title="30"
-      description="Last Month Added"
-      message="Collection expanding steadily with new acquisitions added regularly to serve our growing community of readers"
+    <SummaryCard
+      label="New Customers"
+      value="1,234"
+      change="-20%"
+      trend="down"
+      description="Down 20% this period"
+      footer="Acquisition needs attention"
     />
-    <CardItem
-      title="6230"
-      description="Total Users"
-      message="Collection expanding steadily with new acquisitions added regularly to serve our growing community of readers"
-      available={1000}
+    <SummaryCard
+      label="Active Accounts"
+      value="45,678"
+      change="+12.5%"
+      trend="up"
+      description="Strong user retention"
+      footer="Engagement exceed targets"
     />
-    <CardItem
-      title="100"
-      description="Last Month New User"
-      message="Collection expanding steadily with new acquisitions added regularly to serve our growing community of readers"
+    <SummaryCard
+      label="Growth Rate"
+      value="4.5%"
+      change="+4.5%"
+      trend="up"
+      description="Steady performance Increase"
+      footer="Meets growth projections"
     />
   </div>
 );
