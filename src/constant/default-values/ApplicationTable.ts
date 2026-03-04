@@ -7,11 +7,15 @@ export const TableHeaders = [
   },
   {
     label: "Book Id",
-    value: "bookId",
+    value: "bookIdDisplay",
   },
   {
     label: "Book Name",
     value: "bookName",
+  },
+  {
+    label: "Quantity",
+    value: "quantity",
   },
   {
     label: "Applicant",
@@ -20,6 +24,10 @@ export const TableHeaders = [
   {
     label: "Application Date",
     value: "applicationDate",
+  },
+  {
+    label: "Status",
+    value: "status",
   },
 ];
 

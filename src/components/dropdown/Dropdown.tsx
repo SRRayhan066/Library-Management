@@ -20,6 +20,7 @@ interface DropdownWithFormProps extends DropdownProps {
   control: Control<FieldValues>;
   rules?: RegisterOptions;
   loading?: boolean;
+  onValueChange?: (value: string) => void;
 }
 
 export default function Dropdown({
@@ -31,6 +32,7 @@ export default function Dropdown({
   rules,
   disabled = false,
   loading = false,
+  onValueChange,
 }: DropdownWithFormProps) {
   return (
     <Controller
@@ -40,9 +42,12 @@ export default function Dropdown({
       defaultValue={defaultValue}
       render={({ field }) => (
         <Select
-          onValueChange={field.onChange}
+          onValueChange={(value) => {
+            field.onChange(value);
+            onValueChange?.(value);
+          }}
           value={field.value}
-          disabled={disabled}
+          disabled={disabled || loading}
         >
           <SelectTrigger className="w-full relative [&>svg]:hidden">
             <SelectValue placeholder={placeholder} />

@@ -10,6 +10,7 @@ interface IBook extends Document {
   publisher?: string;
   publishedYear?: number;
   quantity: number;
+  totalAvailable: number;
   description?: string;
 }
 
@@ -56,6 +57,11 @@ const BookSchema = new Schema<IBook>(
       required: [true, "Quantity is required"],
       min: [1, "Quantity cannot be less than 1"],
     },
+    totalAvailable: {
+      type: Number,
+      required: [true, "Total available is required"],
+      min: [0, "Total available cannot be less than 0"],
+    },
     description: {
       type: String,
       default: null,
@@ -63,8 +69,15 @@ const BookSchema = new Schema<IBook>(
   },
   {
     timestamps: true,
-  }
+  },
 );
+
+BookSchema.pre("save", function (next) {
+  if (this.totalAvailable === undefined || this.totalAvailable === null) {
+    this.totalAvailable = this.quantity;
+  }
+  next();
+});
 
 const Book =
   mongoose.models.books || mongoose.model<IBook>("books", BookSchema);
