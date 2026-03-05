@@ -14,12 +14,10 @@ import { DateRange } from "react-day-picker";
 
 export interface ApplyBookFormValues {
   dateRange: DateRange | undefined;
-  quantity: number;
 }
 
 export function useApplyBook(
-  bookId: string,
-  availableQuantity: number,
+  bookIds: string[],
   onSuccess?: () => void,
   defaultValues?: Partial<ApplyBookFormValues>,
   mode: "apply" | "edit" = "apply",
@@ -44,7 +42,6 @@ export function useApplyBook(
         from: new Date(),
         to: undefined,
       },
-      quantity: defaultValues?.quantity || 1,
     },
   });
 
@@ -60,11 +57,11 @@ export function useApplyBook(
     }
 
     const payload = {
-      bookId,
+      bookIds,
       userId: user.userId,
       fromDate: data.dateRange.from,
       toDate: data.dateRange.to,
-      quantity: data.quantity,
+      quantity: 1,
     };
 
     const apiRoute =

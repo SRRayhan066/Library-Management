@@ -8,6 +8,7 @@ export const MESSAGE = {
     APPLICATION_CREATED: "Application created successfully",
     APPLICATION_UPDATED: "Application status updated successfully",
     GET_APPLICATIONS: "Applications fetched successfully",
+    GET_MEMBERS: "Members fetched successfully",
     ERROR: {
       USER_CREATION_FAILED: "User creation failed",
       STUDENT_NOT_FOUND: "Student not found",

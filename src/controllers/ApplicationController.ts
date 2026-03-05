@@ -5,17 +5,17 @@ import { MESSAGE } from "@/lib/message";
 
 export class ApplicationController {
   static async createApplication(req: NextRequest) {
-    const { bookId, userId, fromDate, toDate, quantity } = await req.json();
+    const { bookIds, userId, fromDate, toDate, quantity } = await req.json();
 
-    if (!bookId || !userId || !fromDate || !toDate || !quantity) {
+    if (!bookIds || !userId || !fromDate || !toDate || !quantity) {
       return {
         status: HttpStatusCode.BAD_REQUEST,
         message: "Missing required fields",
       };
     }
 
-    const application = await ApplicationService.createApplication({
-      bookId,
+    const applications = await ApplicationService.createApplications({
+      bookIds,
       userId,
       fromDate,
       toDate,
@@ -24,7 +24,7 @@ export class ApplicationController {
 
     return {
       status: HttpStatusCode.CREATED,
-      data: application,
+      data: applications,
       message: MESSAGE.API.APPLICATION_CREATED,
     };
   }
@@ -135,6 +135,28 @@ export class ApplicationController {
       status: HttpStatusCode.OK,
       data: result,
       message: "Application updated successfully",
+    };
+  }
+
+  static async requestReturn(
+    req: NextRequest,
+    context: { params?: { id: string } },
+  ) {
+    const { id } = (await context.params) as { id: string };
+
+    if (!id) {
+      return {
+        status: HttpStatusCode.BAD_REQUEST,
+        message: "Application ID is required",
+      };
+    }
+
+    const result = await ApplicationService.requestReturn(id);
+
+    return {
+      status: HttpStatusCode.OK,
+      data: result,
+      message: "Return request submitted successfully",
     };
   }
 }

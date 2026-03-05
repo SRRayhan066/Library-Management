@@ -11,6 +11,12 @@ export const bookGenres = [
   { label: "Self-Help", value: BookGenre.SELF_HELP },
   { label: "History", value: BookGenre.HISTORY },
   { label: "Horror", value: BookGenre.HORROR },
+  { label: "CSE", value: BookGenre.CSE },
+  { label: "EEE", value: BookGenre.EEE },
+  { label: "Civil", value: BookGenre.CIVIL },
+  { label: "Law", value: BookGenre.LAW },
+  { label: "Math", value: BookGenre.MATH },
+  { label: "Literature", value: BookGenre.LITERATURE },
   { label: "Others", value: BookGenre.OTHERS },
 ];
 

@@ -1,5 +1,5 @@
 import { connectDB } from "@/config/db";
-import ApplicationSection from "@/section/applicatiion-section/ApplicationSection";
+import ApplicationSection from "@/section/application-section/ApplicationSection";
 import { ApplicationService } from "@/services/ApplicationService";
 import { jsonObject } from "@/utils/CommonUtils";
 import { getServerAuthUser } from "@/utils/UserUtils";

@@ -6,27 +6,32 @@ import { ApiError } from "@/wrapper/ApiError";
 import { ApplicationStatus } from "@/constant/enum/ApplicationStatus";
 
 export class ApplicationService {
-  static async createApplication({
-    bookId,
+  static async createApplications({
+    bookIds,
     userId,
     fromDate,
     toDate,
     quantity,
   }: {
-    bookId: string;
+    bookIds: string[];
     userId: string;
     fromDate: string;
     toDate: string;
     quantity: number;
   }) {
-    // Check if book exists
-    const book = await Book.findById(bookId);
-    if (!book) {
-      throw new ApiError("Book not found", HttpStatusCode.NOT_FOUND);
+    // Check if books exist
+    for (const bookId of bookIds) {
+      const book = await Book.findById(bookId);
+      if (!book) {
+        throw new ApiError(
+          `Book with ID ${bookId} not found`,
+          HttpStatusCode.NOT_FOUND,
+        );
+      }
     }
 
     const newApplication = await Application.create({
-      bookId,
+      bookIds,
       userId,
       status: ApplicationStatus.PENDING,
       appliedDate: new Date(),
@@ -40,7 +45,7 @@ export class ApplicationService {
 
   static async getApplicationsByUser(userId: string) {
     const applications = await Application.find({ userId })
-      .populate("bookId")
+      .populate("bookIds")
       .populate({
         path: "userId",
         populate: {
@@ -53,7 +58,7 @@ export class ApplicationService {
 
   static async getAllApplications() {
     const applications = await Application.find()
-      .populate("bookId")
+      .populate("bookIds")
       .populate({
         path: "userId",
         populate: {
@@ -73,33 +78,79 @@ export class ApplicationService {
     status: ApplicationStatus;
     adminId: string;
   }) {
+    const application =
+      await Application.findById(applicationId).populate("bookIds");
+    if (!application) {
+      throw new ApiError("Application not found", HttpStatusCode.NOT_FOUND);
+    }
+
+    // Handle stock when approved
+    if (status === ApplicationStatus.APPROVED) {
+      for (const book of application.bookIds as any) {
+        if (!book || typeof book === "string") continue;
+
+        const qty = application.quantity || 1;
+        if (book.totalAvailable < qty) {
+          throw new ApiError(
+            `Insufficient quantity for book: ${book.title}. Available: ${book.totalAvailable}, Requested: ${qty}`,
+            HttpStatusCode.BAD_REQUEST,
+          );
+        }
+
+        book.totalAvailable -= qty;
+        await book.save();
+      }
+    }
+
+    // Handle stock and fine when returned
+    if (status === ApplicationStatus.RETURNED) {
+      // Calculate fine
+      const today = new Date();
+      const toDate = new Date(application.toDate);
+
+      if (today > toDate) {
+        const diffTime = Math.abs(today.getTime() - toDate.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        const fineRule = await mongoose.model("fineRules").findOne();
+        if (fineRule) {
+          const fineDays = Math.max(0, diffDays - fineRule.gracePeriod);
+          application.fineAmount = fineDays * fineRule.chargesPerDay;
+        }
+      }
+
+      application.returnDate = today;
+
+      // Increment stock
+      for (const book of application.bookIds as any) {
+        if (!book || typeof book === "string") continue;
+        const qty = application.quantity || 1;
+        book.totalAvailable += qty;
+        await book.save();
+      }
+    }
+
+    application.status = status;
+    application.updatedBy = adminId as unknown as mongoose.Types.ObjectId;
+    await application.save();
+
+    return application;
+  }
+
+  static async requestReturn(applicationId: string) {
     const application = await Application.findById(applicationId);
     if (!application) {
       throw new ApiError("Application not found", HttpStatusCode.NOT_FOUND);
     }
 
-    if (status === ApplicationStatus.APPROVED) {
-      const book = await Book.findById(application.bookId);
-      if (!book) {
-        throw new ApiError(
-          "Associated book not found",
-          HttpStatusCode.NOT_FOUND,
-        );
-      }
-
-      if (book.totalAvailable < application.quantity) {
-        throw new ApiError(
-          `Insufficient book quantity. Available: ${book.totalAvailable}, Requested: ${application.quantity}`,
-          HttpStatusCode.BAD_REQUEST,
-        );
-      }
-
-      book.totalAvailable -= application.quantity;
-      await book.save();
+    if (application.status !== ApplicationStatus.APPROVED) {
+      throw new ApiError(
+        "Only approved applications can be returned",
+        HttpStatusCode.BAD_REQUEST,
+      );
     }
 
-    application.status = status;
-    application.updatedBy = adminId as unknown as mongoose.Types.ObjectId;
+    application.status = ApplicationStatus.RETURN_PENDING;
     await application.save();
 
     return application;

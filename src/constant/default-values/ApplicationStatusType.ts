@@ -13,4 +13,12 @@ export const ApplicationStatusOptions = [
     label: "Rejected",
     value: ApplicationStatus.REJECTED,
   },
+  {
+    label: "Return Pending",
+    value: ApplicationStatus.RETURN_PENDING,
+  },
+  {
+    label: "Returned",
+    value: ApplicationStatus.RETURNED,
+  },
 ];

@@ -1,13 +1,10 @@
 import { ApplyBookFormValues, useApplyBook } from "@/hooks/use-apply-book";
 import { Button } from "@/components/ui/button";
-import InputField from "@/components/input-field/InputField";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { Controller } from "react-hook-form";
 
 interface ApplyBookFormProps {
-  bookId: string;
-  bookTitle: string;
-  availableQuantity: number;
+  books: { _id: string; title: string }[];
   onSuccess?: () => void;
   defaultValues?: Partial<ApplyBookFormValues>;
   mode?: "apply" | "edit";
@@ -15,37 +12,37 @@ interface ApplyBookFormProps {
 }
 
 export default function ApplyBookForm({
-  bookId,
-  bookTitle,
-  availableQuantity,
+  books,
   onSuccess,
   defaultValues,
   mode = "apply",
   applicationId,
 }: ApplyBookFormProps) {
-  const { register, handleSubmit, errors, isSubmitting, isValid, control } =
-    useApplyBook(
-      bookId,
-      availableQuantity,
-      onSuccess,
-      defaultValues,
-      mode,
-      applicationId,
-    );
+  const bookIds = books.map((b) => b._id);
+  const { handleSubmit, errors, isSubmitting, isValid, control } = useApplyBook(
+    bookIds,
+    onSuccess,
+    defaultValues,
+    mode,
+    applicationId,
+  );
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      <div className="space-y-2">
+      <div className="space-y-4">
         <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground">
           Applying for:
         </h3>
-        <p className="text-lg font-black tracking-tight">{bookTitle}</p>
-        <p className="text-xs text-muted-foreground uppercase tracking-widest">
-          Available Stock:{" "}
-          <span className="text-foreground font-bold">
-            {availableQuantity} Units
-          </span>
-        </p>
+        <div className="flex flex-col gap-2 max-h-[150px] overflow-y-auto pr-2 custom-scrollbar">
+          {books.map((book) => (
+            <div
+              key={book._id}
+              className="p-2 rounded-md bg-muted/50 border border-border"
+            >
+              <p className="text-sm font-bold tracking-tight">{book.title}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-2">
@@ -69,25 +66,6 @@ export default function ApplyBookForm({
           </p>
         )}
       </div>
-
-      <InputField
-        label="Quantity"
-        type="number"
-        required
-        {...register("quantity", {
-          required: "Please specify the quantity of books you need",
-          min: {
-            value: 1,
-            message: "The requested quantity must be at least 1 unit",
-          },
-          max: {
-            value: availableQuantity,
-            message: `The requested quantity exceeds the available stock of ${availableQuantity} units`,
-          },
-        })}
-        error={errors.quantity?.message}
-        description={`Enter number of units (1 - ${availableQuantity})`}
-      />
 
       <div className="flex justify-end gap-3 pt-4">
         <Button

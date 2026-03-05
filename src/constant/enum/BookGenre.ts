@@ -9,5 +9,11 @@ export enum BookGenre {
   SELF_HELP = "SELF_HELP",
   HISTORY = "HISTORY",
   HORROR = "HORROR",
+  CSE = "CSE",
+  EEE = "EEE",
+  CIVIL = "CIVIL",
+  LAW = "LAW",
+  MATH = "MATH",
+  LITERATURE = "LITERATURE",
   OTHERS = "OTHERS",
 }

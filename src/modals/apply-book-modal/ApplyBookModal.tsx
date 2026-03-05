@@ -5,37 +5,22 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { IconClipboardCheck } from "@tabler/icons-react";
-import { useState } from "react";
 import ApplyBookForm from "@/components/form/apply-book-form/ApplyBookForm";
 
 interface ApplyBookModalProps {
-  book: {
-    _id: string;
-    title: string;
-    quantity: number;
-    totalAvailable: number;
-  };
+  books: { _id: string; title: string }[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
-export default function ApplyBookModal({ book }: ApplyBookModalProps) {
-  const [open, setOpen] = useState(false);
-
+export default function ApplyBookModal({
+  books,
+  open,
+  onOpenChange,
+}: ApplyBookModalProps) {
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="sm"
-          className="font-bold uppercase tracking-widest text-[10px] cursor-pointer"
-        >
-          <IconClipboardCheck size={16} />
-          Apply for the Book
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className="max-w-lg"
         onPointerDownOutside={(e) => e.preventDefault()}
@@ -46,12 +31,7 @@ export default function ApplyBookModal({ book }: ApplyBookModalProps) {
             Request Book Archive
           </DialogTitle>
         </DialogHeader>
-        <ApplyBookForm
-          bookId={book._id}
-          bookTitle={book.title}
-          availableQuantity={book.totalAvailable ?? book.quantity}
-          onSuccess={() => setOpen(false)}
-        />
+        <ApplyBookForm books={books} onSuccess={() => onOpenChange(false)} />
       </DialogContent>
     </Dialog>
   );

@@ -79,7 +79,11 @@ BookSchema.pre("save", function (next) {
   next();
 });
 
-const Book =
-  mongoose.models.books || mongoose.model<IBook>("books", BookSchema);
+// Clear the model in development to pick up schema changes
+if (mongoose.models.books) {
+  delete mongoose.models.books;
+}
+
+const Book = mongoose.model<IBook>("books", BookSchema);
 
 export default Book;

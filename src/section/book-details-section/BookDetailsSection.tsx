@@ -9,13 +9,15 @@ import {
   IconCalendar,
   IconPackage,
   IconArrowLeft,
+  IconClipboardCheck,
 } from "@tabler/icons-react";
 import Image from "next/image";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import Link from "next/link";
 import DeleteBookModal from "@/modals/delete-book-modal/DeleteBookModal";
 import EditBookModal from "@/modals/edit-book-modal/EditBookModal";
 import ApplyBookModal from "@/modals/apply-book-modal/ApplyBookModal";
+import { Button } from "@/components/ui/button";
 import { useAuthUser } from "@/providers/AuthProvider";
 import { UserType } from "@/constant/enum/UserType";
 import { getGenreLabel } from "@/utils/BookUtils";
@@ -40,6 +42,7 @@ interface BookDetailsSectionProps {
 
 export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
   const { user } = useAuthUser();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isStudent = user?.userType === UserType.STUDENT;
 
   return (
@@ -74,9 +77,25 @@ export default function BookDetailsSection({ book }: BookDetailsSectionProps) {
                 <DeleteBookModal bookId={book._id} bookTitle={book.title} />
               </>
             )}
-            {isStudent && book.quantity > 0 && <ApplyBookModal book={book} />}
+            {isStudent && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-bold uppercase tracking-widest text-[10px] cursor-pointer"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <IconClipboardCheck size={16} />
+                Apply for the Book
+              </Button>
+            )}
           </div>
         </div>
+
+        <ApplyBookModal
+          books={[{ _id: book._id, title: book.title }]}
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+        />
 
         <div className="w-full flex flex-col lg:flex-row gap-12 items-start">
           <div className="w-full lg:w-[250px] flex-shrink-0">
