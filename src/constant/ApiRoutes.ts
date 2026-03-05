@@ -43,3 +43,11 @@ export const updateApplicationApi = (id: string) => {
 export const updateApplicationStatusApi = (id: string) => {
   return Api.PATCH(`/api/application/${id}`);
 };
+
+export const fineRulesApi = () => {
+  return Api.GET("/api/fine-rules");
+};
+
+export const updateFineRulesApi = () => {
+  return Api.POST("/api/fine-rules");
+};
