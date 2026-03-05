@@ -52,6 +52,14 @@ export const fineRulesApi = () => {
   return Api.GET("/api/fine-rules");
 };
 
+export const membersApi = () => {
+  return Api.GET("/api/members");
+};
+
+export const memberDetailsApi = (id: string) => {
+  return Api.GET(`/api/members/${id}`);
+};
+
 export const updateFineRulesApi = () => {
   return Api.POST("/api/fine-rules");
 };
