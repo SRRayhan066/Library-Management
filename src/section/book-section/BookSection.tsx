@@ -17,6 +17,9 @@ import Link from "next/link";
 import { UserType } from "@/constant/enum/UserType";
 import { useMemo, useState } from "react";
 import { getGenreLabel } from "@/utils/BookUtils";
+import { Button } from "@/components/ui/button";
+import { IconClipboardCheck } from "@tabler/icons-react";
+import ApplyBookModal from "@/modals/apply-book-modal/ApplyBookModal";
 
 interface Book {
   _id: string;
@@ -45,7 +48,20 @@ export default function BookSection({ books }: BookSectionProps) {
   });
   const { user } = useAuthUser();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBooks, setSelectedBooks] = useState<Book[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const selectedGenre = watch("genre");
+
+  const toggleBookSelection = (book: Book) => {
+    setSelectedBooks((prev) => {
+      const isSelected = prev.find((b) => b._id === book._id);
+      if (isSelected) {
+        return prev.filter((b) => b._id !== book._id);
+      } else {
+        return [...prev, book];
+      }
+    });
+  };
 
   const genreOptions = useMemo(() => {
     return [{ label: "All Genres", value: "all" }, ...bookGenres];
@@ -81,7 +97,7 @@ export default function BookSection({ books }: BookSectionProps) {
               </InputGroupAddon>
             </InputGroup>
 
-            <div className="w-1/4">
+            <div className="w-1/4 flex gap-2">
               <Dropdown
                 name="genre"
                 control={control as unknown as Control<FieldValues>}
@@ -89,30 +105,57 @@ export default function BookSection({ books }: BookSectionProps) {
                 options={genreOptions}
               />
             </div>
+            {selectedBooks.length > 0 &&
+              user?.userType === UserType.STUDENT && (
+                <Button
+                  onClick={() => setIsModalOpen(true)}
+                  className="font-bold uppercase tracking-widest text-[10px] animate-in slide-in-from-right-5 duration-300"
+                >
+                  <IconClipboardCheck size={16} />
+                  Apply ({selectedBooks.length})
+                </Button>
+              )}
             {user?.userType === UserType.ADMIN && <AddBookSection />}
           </div>
         </div>
         <Separator />
       </div>
 
+      <ApplyBookModal
+        books={selectedBooks.map((b) => ({ _id: b._id, title: b.title }))}
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+      />
+
       <div className="p-[20px] grid grid-cols-4 gap-5">
-        {filteredBooks.map((book) => (
-          <Link
-            key={book._id}
-            href={`/books/${book._id}`}
-            className="block transition-transform hover:scale-[1.02] h-full"
-          >
-            <CardItem
-              coverImage={book.coverImage}
-              title={book.title}
-              author={book.author}
-              genre={getGenreLabel(book.genre)}
-              total={book.quantity}
-              available={book.totalAvailable ?? book.quantity}
-              description={book.description}
-            />
-          </Link>
-        ))}
+        {filteredBooks.map((book) => {
+          const isSelected = selectedBooks.some((b) => b._id === book._id);
+          return (
+            <div key={book._id} className="relative group">
+              <CardItem
+                coverImage={book.coverImage}
+                title={book.title}
+                author={book.author}
+                genre={getGenreLabel(book.genre)}
+                total={book.quantity}
+                available={book.totalAvailable ?? book.quantity}
+                description={book.description}
+                isSelected={isSelected}
+                onSelect={
+                  user?.userType === UserType.STUDENT
+                    ? () => toggleBookSelection(book)
+                    : undefined
+                }
+              />
+              <Link
+                href={`/books/${book._id}`}
+                className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 hover:bg-background p-2 rounded-full border border-border text-[10px] font-bold uppercase tracking-widest z-20"
+              >
+                Details
+              </Link>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

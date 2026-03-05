@@ -7,4 +7,6 @@ export interface CardItemProps {
   total?: number;
   available?: number;
   bookDescription?: string;
+  isSelected?: boolean;
+  onSelect?: () => void;
 }
