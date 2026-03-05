@@ -13,12 +13,12 @@ interface EditApplicationModalProps {
   onClose: () => void;
   application: {
     _id: string;
-    bookId: {
+    bookIds: {
       _id: string;
       title: string;
       quantity: number;
       totalAvailable: number;
-    };
+    }[];
     quantity: number;
     fromDate: string;
     toDate: string;
@@ -45,17 +45,15 @@ export default function EditApplicationModal({
           </DialogTitle>
         </DialogHeader>
         <ApplyBookForm
-          bookId={application.bookId._id}
-          bookTitle={application.bookId.title}
-          availableQuantity={
-            application.bookId.totalAvailable ?? application.bookId.quantity
-          }
+          books={application.bookIds.map((b) => ({
+            _id: b._id,
+            title: b.title,
+          }))}
           defaultValues={{
             dateRange: {
               from: new Date(application.fromDate),
               to: new Date(application.toDate),
             },
-            quantity: application.quantity,
           }}
           onSuccess={onClose}
           mode="edit"

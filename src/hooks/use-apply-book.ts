@@ -61,7 +61,7 @@ export function useApplyBook(
       userId: user.userId,
       fromDate: data.dateRange.from,
       toDate: data.dateRange.to,
-      quantity: 1, // Default quantity is now 1 for each book
+      quantity: 1,
     };
 
     const apiRoute =

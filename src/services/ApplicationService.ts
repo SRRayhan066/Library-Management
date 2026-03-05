@@ -19,10 +19,8 @@ export class ApplicationService {
     toDate: string;
     quantity: number;
   }) {
-    const applications = [];
-
+    // Check if books exist
     for (const bookId of bookIds) {
-      // Check if book exists
       const book = await Book.findById(bookId);
       if (!book) {
         throw new ApiError(
@@ -30,26 +28,24 @@ export class ApplicationService {
           HttpStatusCode.NOT_FOUND,
         );
       }
-
-      const newApplication = await Application.create({
-        bookId,
-        userId,
-        status: ApplicationStatus.PENDING,
-        appliedDate: new Date(),
-        fromDate: new Date(fromDate),
-        toDate: new Date(toDate),
-        quantity,
-      });
-
-      applications.push(newApplication);
     }
 
-    return applications;
+    const newApplication = await Application.create({
+      bookIds,
+      userId,
+      status: ApplicationStatus.PENDING,
+      appliedDate: new Date(),
+      fromDate: new Date(fromDate),
+      toDate: new Date(toDate),
+      quantity,
+    });
+
+    return newApplication;
   }
 
   static async getApplicationsByUser(userId: string) {
     const applications = await Application.find({ userId })
-      .populate("bookId")
+      .populate("bookIds")
       .populate({
         path: "userId",
         populate: {
@@ -62,7 +58,7 @@ export class ApplicationService {
 
   static async getAllApplications() {
     const applications = await Application.find()
-      .populate("bookId")
+      .populate("bookIds")
       .populate({
         path: "userId",
         populate: {
@@ -88,23 +84,25 @@ export class ApplicationService {
     }
 
     if (status === ApplicationStatus.APPROVED) {
-      const book = await Book.findById(application.bookId);
-      if (!book) {
-        throw new ApiError(
-          "Associated book not found",
-          HttpStatusCode.NOT_FOUND,
-        );
-      }
+      for (const bookId of application.bookIds) {
+        const book = await Book.findById(bookId);
+        if (!book) {
+          throw new ApiError(
+            `Associated book ${bookId} not found`,
+            HttpStatusCode.NOT_FOUND,
+          );
+        }
 
-      if (book.totalAvailable < application.quantity) {
-        throw new ApiError(
-          `Insufficient book quantity. Available: ${book.totalAvailable}, Requested: ${application.quantity}`,
-          HttpStatusCode.BAD_REQUEST,
-        );
-      }
+        if (book.totalAvailable < application.quantity) {
+          throw new ApiError(
+            `Insufficient quantity for book: ${book.title}. Available: ${book.totalAvailable}, Requested: ${application.quantity}`,
+            HttpStatusCode.BAD_REQUEST,
+          );
+        }
 
-      book.totalAvailable -= application.quantity;
-      await book.save();
+        book.totalAvailable -= application.quantity;
+        await book.save();
+      }
     }
 
     application.status = status;

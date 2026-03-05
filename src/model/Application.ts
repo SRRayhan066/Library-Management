@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { ApplicationStatus } from "@/constant/enum/ApplicationStatus";
 
 export interface IApplication extends Document {
-  bookId: mongoose.Types.ObjectId;
+  bookIds: mongoose.Types.ObjectId[];
   userId: mongoose.Types.ObjectId;
   status: ApplicationStatus;
   appliedDate: Date;
@@ -14,11 +14,13 @@ export interface IApplication extends Document {
 
 const ApplicationSchema = new Schema<IApplication>(
   {
-    bookId: {
-      type: Schema.Types.ObjectId,
-      ref: "books",
-      required: [true, "Book ID is required"],
-    },
+    bookIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "books",
+        required: [true, "Book IDs are required"],
+      },
+    ],
     userId: {
       type: Schema.Types.ObjectId,
       ref: "members",
@@ -60,8 +62,14 @@ const ApplicationSchema = new Schema<IApplication>(
   },
 );
 
-const Application =
-  mongoose.models.applications ||
-  mongoose.model<IApplication>("applications", ApplicationSchema);
+// Clear the model in development to pick up schema changes
+if (mongoose.models.applications) {
+  delete mongoose.models.applications;
+}
+
+const Application = mongoose.model<IApplication>(
+  "applications",
+  ApplicationSchema,
+);
 
 export default Application;

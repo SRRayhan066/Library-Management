@@ -2,28 +2,28 @@ import { ApplicationStatus } from "../enum/ApplicationStatus";
 
 export const TableHeaders = [
   {
-    label: "Registration No.",
+    label: "Application ID",
+    value: "appId",
+  },
+  {
+    label: "Reg No.",
     value: "registrationNo",
-  },
-  {
-    label: "Book Id",
-    value: "bookIdDisplay",
-  },
-  {
-    label: "Book Name",
-    value: "bookName",
-  },
-  {
-    label: "Quantity",
-    value: "quantity",
   },
   {
     label: "Applicant",
     value: "applicant",
   },
   {
-    label: "Application Date",
+    label: "App Date",
     value: "applicationDate",
+  },
+  {
+    label: "Start Date",
+    value: "startDate",
+  },
+  {
+    label: "End Date",
+    value: "endDate",
   },
   {
     label: "Status",

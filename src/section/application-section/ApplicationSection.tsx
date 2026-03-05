@@ -6,7 +6,12 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import { IconSearch, IconTrash, IconPencil } from "@tabler/icons-react";
+import {
+  IconSearch,
+  IconTrash,
+  IconPencil,
+  IconEye,
+} from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
 import { TableHeaders } from "@/constant/default-values/ApplicationTable";
 import Dropdown from "@/components/dropdown/Dropdown";
@@ -23,6 +28,7 @@ import { useDeleteApplication } from "@/hooks/use-delete-application";
 import { Button } from "@/components/ui/button";
 import { useUpdateApplicationStatus } from "@/hooks/use-update-application-status";
 import { ApplicationStatus } from "@/constant/enum/ApplicationStatus";
+import ViewApplicationDetailsModal from "@/modals/view-application-details-modal/ViewApplicationDetailsModal";
 
 interface ApplicationSectionProps {
   applications: any[];
@@ -34,14 +40,14 @@ export default function ApplicationSection({
   const { user } = useAuthUser();
   const isAdmin = user?.userType === UserType.ADMIN;
 
-  const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [selectedApp, setSelectedApp] = useState<any | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   const { deleteApplication, isDeleting } = useDeleteApplication(() => {
     setIsDeleteModalOpen(false);
-    setSelectedAppId(null);
+    setSelectedApp(null);
   });
 
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -64,14 +70,13 @@ export default function ApplicationSection({
 
   const tableData = applications.map((app) => ({
     ...app,
+    appId: app._id.slice(-6).toUpperCase(),
     registrationNo:
       app.userId?.referenceId?.studentId || app.userId?.userId || "N/A",
-    bookIdDisplay: app.bookId?._id
-      ? `${app.bookId._id.slice(0, 8)}...${app.bookId._id.slice(-4)}`
-      : "N/A",
-    bookName: app.bookId?.title || "N/A",
     applicant: app.userId?.referenceId?.name || app.userId?.name || "N/A",
     applicationDate: format(new Date(app.appliedDate), "PPP"),
+    startDate: format(new Date(app.fromDate), "PPP"),
+    endDate: format(new Date(app.toDate), "PPP"),
     rawStatus: app.status,
     status: (
       <div className="flex justify-center">
@@ -128,52 +133,69 @@ export default function ApplicationSection({
         <DataTable
           headers={isAdmin ? TableHeaders : studentHeaders}
           data={tableData}
-          actionLabel={!isAdmin ? "Action" : undefined}
-          renderAction={
-            !isAdmin
-              ? (row) => (
-                  <div className="flex items-center gap-2 justify-end">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 h-8 w-8 cursor-pointer"
-                      disabled={row.rawStatus !== "PENDING"}
-                      onClick={() => {
-                        setSelectedApp(row);
-                        setIsEditModalOpen(true);
-                      }}
-                    >
-                      <IconPencil size={18} />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-red-500 hover:text-red-600 hover:bg-red-500/10 h-8 w-8 cursor-pointer"
-                      disabled={row.rawStatus !== "PENDING"}
-                      onClick={() => {
-                        setSelectedAppId(row._id);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    >
-                      <IconTrash size={18} />
-                    </Button>
-                  </div>
-                )
-              : undefined
-          }
+          actionLabel="Action"
+          renderAction={(row) => (
+            <div className="flex items-center gap-2 justify-end">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-green-500 hover:text-green-600 hover:bg-green-500/10 h-8 w-8 cursor-pointer"
+                onClick={() => {
+                  setSelectedApp(row);
+                  setIsDetailsModalOpen(true);
+                }}
+              >
+                <IconEye size={18} />
+              </Button>
+              {!isAdmin && (
+                <>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-blue-500 hover:text-blue-600 hover:bg-blue-500/10 h-8 w-8 cursor-pointer"
+                    disabled={row.rawStatus !== "PENDING"}
+                    onClick={() => {
+                      setSelectedApp(row);
+                      setIsEditModalOpen(true);
+                    }}
+                  >
+                    <IconPencil size={18} />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-500 hover:text-red-600 hover:bg-red-500/10 h-8 w-8 cursor-pointer"
+                    disabled={row.rawStatus !== "PENDING"}
+                    onClick={() => {
+                      setSelectedApp(row);
+                      setIsDeleteModalOpen(true);
+                    }}
+                  >
+                    <IconTrash size={18} />
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
         />
       </div>
 
       <DeleteApplicationModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={() => selectedAppId && deleteApplication(selectedAppId)}
+        onConfirm={() => selectedApp && deleteApplication(selectedApp._id)}
         isDeleting={isDeleting}
       />
 
       <EditApplicationModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
+        application={selectedApp}
+      />
+
+      <ViewApplicationDetailsModal
+        isOpen={isDetailsModalOpen}
+        onClose={() => setIsDetailsModalOpen(false)}
         application={selectedApp}
       />
     </section>
