@@ -44,6 +44,7 @@ export default function ApplicationSection({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { deleteApplication, isDeleting } = useDeleteApplication(() => {
     setIsDeleteModalOpen(false);
@@ -109,6 +110,15 @@ export default function ApplicationSection({
     ),
   }));
 
+  const filteredData = tableData.filter((item) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      item.appId.toLowerCase().includes(query) ||
+      item.applicant.toLowerCase().includes(query) ||
+      item.registrationNo.toLowerCase().includes(query)
+    );
+  });
+
   const studentHeaders = TableHeaders.filter(
     (header) => header.value !== "applicant",
   );
@@ -120,7 +130,11 @@ export default function ApplicationSection({
           <h3 className="font-semibold text-2xl">Applications</h3>
           <div className="flex justify-end items-center gap-2 w-1/2 ">
             <InputGroup className="w-1/2 ">
-              <InputGroupInput placeholder="Search by id or name..." />
+              <InputGroupInput
+                placeholder="Search by id or name..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
               <InputGroupAddon>
                 <IconSearch />
               </InputGroupAddon>
@@ -132,7 +146,7 @@ export default function ApplicationSection({
       <div className="p-4">
         <DataTable
           headers={isAdmin ? TableHeaders : studentHeaders}
-          data={tableData}
+          data={filteredData}
           actionLabel="Action"
           renderAction={(row) => (
             <div className="flex items-center gap-2 justify-end">
