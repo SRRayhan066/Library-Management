@@ -9,6 +9,8 @@ export interface IApplication extends Document {
   fromDate: Date;
   toDate: Date;
   quantity: number;
+  returnDate?: Date;
+  fineAmount?: number;
   updatedBy?: mongoose.Types.ObjectId;
 }
 
@@ -50,6 +52,14 @@ const ApplicationSchema = new Schema<IApplication>(
       type: Number,
       required: [true, "Quantity is required"],
       min: [1, "Quantity must be at least 1"],
+    },
+    returnDate: {
+      type: Date,
+      default: null,
+    },
+    fineAmount: {
+      type: Number,
+      default: 0,
     },
     updatedBy: {
       type: Schema.Types.ObjectId,

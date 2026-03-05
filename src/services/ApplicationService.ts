@@ -78,35 +78,79 @@ export class ApplicationService {
     status: ApplicationStatus;
     adminId: string;
   }) {
-    const application = await Application.findById(applicationId);
+    const application =
+      await Application.findById(applicationId).populate("bookIds");
     if (!application) {
       throw new ApiError("Application not found", HttpStatusCode.NOT_FOUND);
     }
 
+    // Handle stock when approved
     if (status === ApplicationStatus.APPROVED) {
-      for (const bookId of application.bookIds) {
-        const book = await Book.findById(bookId);
-        if (!book) {
-          throw new ApiError(
-            `Associated book ${bookId} not found`,
-            HttpStatusCode.NOT_FOUND,
-          );
-        }
+      for (const book of application.bookIds as any) {
+        if (!book || typeof book === "string") continue;
 
-        if (book.totalAvailable < application.quantity) {
+        const qty = application.quantity || 1;
+        if (book.totalAvailable < qty) {
           throw new ApiError(
-            `Insufficient quantity for book: ${book.title}. Available: ${book.totalAvailable}, Requested: ${application.quantity}`,
+            `Insufficient quantity for book: ${book.title}. Available: ${book.totalAvailable}, Requested: ${qty}`,
             HttpStatusCode.BAD_REQUEST,
           );
         }
 
-        book.totalAvailable -= application.quantity;
+        book.totalAvailable -= qty;
+        await book.save();
+      }
+    }
+
+    // Handle stock and fine when returned
+    if (status === ApplicationStatus.RETURNED) {
+      // Calculate fine
+      const today = new Date();
+      const toDate = new Date(application.toDate);
+
+      if (today > toDate) {
+        const diffTime = Math.abs(today.getTime() - toDate.getTime());
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        const fineRule = await mongoose.model("fineRules").findOne();
+        if (fineRule) {
+          const fineDays = Math.max(0, diffDays - fineRule.gracePeriod);
+          application.fineAmount = fineDays * fineRule.chargesPerDay;
+        }
+      }
+
+      application.returnDate = today;
+
+      // Increment stock
+      for (const book of application.bookIds as any) {
+        if (!book || typeof book === "string") continue;
+        const qty = application.quantity || 1;
+        book.totalAvailable += qty;
         await book.save();
       }
     }
 
     application.status = status;
     application.updatedBy = adminId as unknown as mongoose.Types.ObjectId;
+    await application.save();
+
+    return application;
+  }
+
+  static async requestReturn(applicationId: string) {
+    const application = await Application.findById(applicationId);
+    if (!application) {
+      throw new ApiError("Application not found", HttpStatusCode.NOT_FOUND);
+    }
+
+    if (application.status !== ApplicationStatus.APPROVED) {
+      throw new ApiError(
+        "Only approved applications can be returned",
+        HttpStatusCode.BAD_REQUEST,
+      );
+    }
+
+    application.status = ApplicationStatus.RETURN_PENDING;
     await application.save();
 
     return application;

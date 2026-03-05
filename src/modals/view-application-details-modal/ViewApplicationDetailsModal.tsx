@@ -8,7 +8,14 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { IconBook, IconCalendar, IconUser } from "@tabler/icons-react";
+import {
+  IconBook,
+  IconCalendar,
+  IconUser,
+  IconCoin,
+  IconClockRestore,
+} from "@tabler/icons-react";
+import { format } from "date-fns";
 
 interface ViewApplicationDetailsModalProps {
   isOpen: boolean;
@@ -94,18 +101,42 @@ export default function ViewApplicationDetailsModal({
             </div>
           </div>
 
-          <div className="flex justify-between items-center pt-4">
+          <div className="flex justify-between items-start pt-4">
             <div className="space-y-1">
               <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                 Status
               </span>
-              <div>{application.status}</div>
+              <div className="pt-1">{application.status}</div>
             </div>
+
+            {application.fineAmount > 0 && (
+              <div className="space-y-1 text-center">
+                <span className="text-[10px] font-black uppercase tracking-widest text-red-500">
+                  Late Fine
+                </span>
+                <p className="text-sm font-black text-red-500 flex items-center justify-center gap-1">
+                  <IconCoin size={14} />
+                  {application.fineAmount} Taka
+                </p>
+              </div>
+            )}
+
+            {application.returnDate && (
+              <div className="space-y-1 text-center">
+                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                  Returned On
+                </span>
+                <p className="text-xs font-semibold">
+                  {format(new Date(application.returnDate), "PPP")}
+                </p>
+              </div>
+            )}
+
             <div className="text-right space-y-1">
               <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                 Applied On
               </span>
-              <p className="text-xs font-semibold">
+              <p className="text-xs font-semibold pt-1">
                 {application.applicationDate}
               </p>
             </div>

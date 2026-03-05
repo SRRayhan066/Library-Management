@@ -137,4 +137,26 @@ export class ApplicationController {
       message: "Application updated successfully",
     };
   }
+
+  static async requestReturn(
+    req: NextRequest,
+    context: { params?: { id: string } },
+  ) {
+    const { id } = (await context.params) as { id: string };
+
+    if (!id) {
+      return {
+        status: HttpStatusCode.BAD_REQUEST,
+        message: "Application ID is required",
+      };
+    }
+
+    const result = await ApplicationService.requestReturn(id);
+
+    return {
+      status: HttpStatusCode.OK,
+      data: result,
+      message: "Return request submitted successfully",
+    };
+  }
 }

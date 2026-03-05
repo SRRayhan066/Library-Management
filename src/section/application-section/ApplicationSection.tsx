@@ -11,6 +11,7 @@ import {
   IconTrash,
   IconPencil,
   IconEye,
+  IconRotate2,
 } from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
 import { TableHeaders } from "@/constant/default-values/ApplicationTable";
@@ -29,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import { useUpdateApplicationStatus } from "@/hooks/use-update-application-status";
 import { ApplicationStatus } from "@/constant/enum/ApplicationStatus";
 import ViewApplicationDetailsModal from "@/modals/view-application-details-modal/ViewApplicationDetailsModal";
+import { useReturnBook } from "@/hooks/use-return-book";
 
 interface ApplicationSectionProps {
   applications: any[];
@@ -55,6 +57,8 @@ export default function ApplicationSection({
   const { updateStatus } = useUpdateApplicationStatus(() => {
     setLoadingId(null);
   });
+
+  const { returnBook, isReturning } = useReturnBook();
 
   const handleStatusChange = async (id: string, status: ApplicationStatus) => {
     if (!user?.userId) return;
@@ -87,7 +91,21 @@ export default function ApplicationSection({
             control={control}
             defaultValue={app.status}
             placeholder="Status"
-            options={ApplicationStatusOptions}
+            options={ApplicationStatusOptions.filter((opt) => {
+              if (app.status === ApplicationStatus.RETURN_PENDING) {
+                return (
+                  opt.value === ApplicationStatus.RETURN_PENDING ||
+                  opt.value === ApplicationStatus.RETURNED
+                );
+              }
+              if (app.status === ApplicationStatus.RETURNED) {
+                return opt.value === ApplicationStatus.RETURNED;
+              }
+              return (
+                opt.value !== ApplicationStatus.RETURN_PENDING &&
+                opt.value !== ApplicationStatus.RETURNED
+              );
+            })}
             onValueChange={(value) =>
               handleStatusChange(app._id, value as ApplicationStatus)
             }
@@ -100,10 +118,17 @@ export default function ApplicationSection({
                 ? "default"
                 : app.status === "REJECTED"
                   ? "destructive"
-                  : "secondary"
+                  : app.status === "RETURNED"
+                    ? "outline"
+                    : "secondary"
+            }
+            className={
+              app.status === "RETURN_PENDING"
+                ? "bg-yellow-500 hover:bg-yellow-600 text-white"
+                : ""
             }
           >
-            {app.status}
+            {app.status === "RETURN_PENDING" ? "RETURN PENDING" : app.status}
           </Badge>
         )}
       </div>
@@ -188,6 +213,18 @@ export default function ApplicationSection({
                     <IconTrash size={18} />
                   </Button>
                 </>
+              )}
+              {!isAdmin && row.rawStatus === "APPROVED" && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-yellow-600 hover:text-yellow-700 hover:bg-yellow-500/10 h-8 w-8 cursor-pointer"
+                  disabled={isReturning}
+                  onClick={() => returnBook(row._id)}
+                  title="Request Return"
+                >
+                  <IconRotate2 size={18} />
+                </Button>
               )}
             </div>
           )}
