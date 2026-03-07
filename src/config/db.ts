@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { seedBooks } from "@/db/seed";
 
 let isConnected = false;
 
@@ -8,7 +9,7 @@ export async function connectDB(): Promise<void> {
     return;
   }
 
-  const mongoURI = process.env.MONGO_URI; 
+  const mongoURI = process.env.MONGO_URI;
 
   if (!mongoURI) {
     throw new Error("MONGO_URI is not defined in environment variables");
@@ -21,6 +22,8 @@ export async function connectDB(): Promise<void> {
     mongoose.connection.on("connected", () => {
       console.log("MongoDB connected successfully");
     });
+
+    await seedBooks();
 
     mongoose.connection.on("error", (err) => {
       console.error("MongoDB connection error:", err);

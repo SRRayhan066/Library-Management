@@ -7,12 +7,10 @@ import { notFound } from "next/navigation";
 const loadBooks = async () => {
   try {
     await connectDB();
-    const { books, totalCount, totalPages } = await BookService.getAllBooks();
+    const { books } = await BookService.getAllBooks({ all: true });
     return {
       data: {
         books: jsonObject(books),
-        totalCount,
-        totalPages,
       },
       error: null,
     };
@@ -24,11 +22,25 @@ const loadBooks = async () => {
   }
 };
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string; search?: string; genre?: string }>;
+}) {
+  const { page: pageParam, search, genre } = await searchParams;
+  const initialPage = Number(pageParam) || 1;
   const { data, error } = await loadBooks();
+
   if (error || !data) {
     return notFound();
   }
 
-  return <BookSection books={data.books} />;
+  return (
+    <BookSection
+      books={data.books}
+      initialPage={initialPage}
+      initialSearch={search || ""}
+      initialGenre={genre || "all"}
+    />
+  );
 }

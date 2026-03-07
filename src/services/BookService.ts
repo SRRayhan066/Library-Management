@@ -10,23 +10,36 @@ import {
 export class BookService {
   static async getAllBooks({
     genre,
+    search,
+    all = false,
     page = DEFAULT_PAGE,
     limit = DEFAULT_PAGE_LIMIT,
   }: {
     genre?: BookGenre;
+    search?: string;
+    all?: boolean;
     page?: number;
     limit?: number;
   } = {}) {
-    const filter: { genre?: BookGenre } = {};
-    if (genre) {
+    const filter: any = {};
+    if (genre && genre !== ("all" as any)) {
       filter.genre = genre;
     }
-    const skip = (page - 1) * limit;
+    if (search) {
+      filter.title = { $regex: search, $options: "i" };
+    }
+    const skip = all ? 0 : (page - 1) * limit;
+    const findQuery = Book.find(filter).sort({ createdAt: -1 });
+
+    if (!all) {
+      findQuery.skip(skip).limit(limit);
+    }
 
     const [books, totalCount] = await Promise.all([
-      Book.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+      findQuery,
       Book.countDocuments(filter),
     ]);
+
     const totalPages = Math.ceil(totalCount / limit);
 
     return {
