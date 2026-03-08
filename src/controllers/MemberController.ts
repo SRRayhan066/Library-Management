@@ -47,4 +47,31 @@ export class MemberController {
       message: "Member details fetched successfully",
     };
   }
+
+  static async getMe(req: NextRequest) {
+    const { searchParams } = new URL(req.url); // Though we'll likely use server-side auth
+    const userId = searchParams.get("userId");
+
+    if (!userId) {
+      return {
+        status: HttpStatusCode.BAD_REQUEST,
+        message: "User ID is required",
+      };
+    }
+
+    const member = await MemberService.getMe(userId);
+
+    if (!member) {
+      return {
+        status: HttpStatusCode.NOT_FOUND,
+        message: "User not found",
+      };
+    }
+
+    return {
+      status: HttpStatusCode.OK,
+      data: member,
+      message: "User profile fetched successfully",
+    };
+  }
 }

@@ -91,4 +91,15 @@ export class MemberService {
 
     return jsonObject(history);
   }
+
+  static async getMe(userId: string) {
+    const member = await Member.findById(userId).populate({
+      path: "referenceId",
+      model: Student,
+    });
+
+    if (!member) return null;
+
+    return jsonObject(member);
+  }
 }
