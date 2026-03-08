@@ -25,14 +25,14 @@ export class AuthService {
     if (!student) {
       throw new ApiError(
         MESSAGE.API.ERROR.STUDENT_NOT_FOUND,
-        HttpStatusCode.NOT_FOUND
+        HttpStatusCode.NOT_FOUND,
       );
     }
 
     if (member) {
       throw new ApiError(
         MESSAGE.API.ERROR.MEMBER_ALREADY_EXIST,
-        HttpStatusCode.CONFLICT
+        HttpStatusCode.CONFLICT,
       );
     }
 
@@ -57,7 +57,7 @@ export class AuthService {
     if (!member) {
       throw new ApiError(
         MESSAGE.API.ERROR.ACCOUNT_NOT_FOUND,
-        HttpStatusCode.NOT_FOUND
+        HttpStatusCode.NOT_FOUND,
       );
     }
 
@@ -65,7 +65,7 @@ export class AuthService {
     if (!isValid) {
       throw new ApiError(
         MESSAGE.API.ERROR.WRONG_PASSWORD,
-        HttpStatusCode.BAD_REQUEST
+        HttpStatusCode.BAD_REQUEST,
       );
     }
 
@@ -73,6 +73,7 @@ export class AuthService {
       userId: member?._id.toString(),
       referenceId: member?.referenceId?.toString() || null,
       userType: member?.userType,
+      email: member?.email,
     };
 
     const token = jwt.sign(payload, process.env.JWT_SECRET!, {
